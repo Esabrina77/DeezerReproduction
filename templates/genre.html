@@ -1,0 +1,34 @@
+{{define "genre"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>editorial</title>
+</head>
+<body>
+    
+    <h1>PLAYLIST DU GENRE </h1>
+    <ul>
+        <div class="AllProducts">
+            {{ range . }}
+        <div id="products">
+            <li>{{ .Name }}</li>
+            <img src="{{ .PictureBig }}" alt="{{ .PictureBig }}" width="100px" height="100px">
+            {{ end }}
+    </ul>
+    
+    <h1>ARTISTE DU GENRE </h1>
+    <ul>
+        <div class="AllProducts">
+            {{ range . }}
+        <div id="products">
+            <li>{{ .Name }}</li>
+            <img src="{{ .PictureBig }}" alt="{{ .PictureBig }}" width="100px" height="100px">
+            {{ end }}
+    </ul>
+</div>
+</div>
+</body>
+</html>
+{{end}}

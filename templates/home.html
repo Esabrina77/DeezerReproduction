@@ -1,0 +1,28 @@
+{{define "home"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Sélectionnez un genre musical :</h1>
+    <form action="/genre" method="GET">
+        <select name="genre">
+            <option value="pop">Pop</option>
+            <option value="rock">Rock</option>
+            <option value="hip-hop">Hip Hop</option>
+            <!-- Ajoutez d'autres options de genres -->
+        </select>
+        <button type="submit">Afficher</button>
+    </form>
+    
+    <h1>welcome to deezer</h1>
+    <a href="/radio">radios</a>
+    <a href="/artists">radios</a>
+    <a href="/editorial">editorials</a>
+    <a href="/search">search</a>
+</body>
+</html>
+{{end}}
