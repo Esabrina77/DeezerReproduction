@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 @font-face {
@@ -10,9 +11,13 @@
 
 body {
     display: flex;
-    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    background-color: rgb(255, 255, 255) !important;
+    min-height:  586px;
+   min-width: 947.2px;
+   overflow: hidden;
+   
 }
-
 .all {
     display: flex;
     z-index: 2;
@@ -25,7 +30,7 @@ body {
     align-items: center;
     flex-direction: column;
     gap: 10px;
-    width: 40%;
+    width: 40vw;
     padding: 20px;
 }
 
@@ -38,6 +43,7 @@ body {
 .Log {
     color: black;
     display: flex;
+    flex-direction: column;
 }
 
 /*FORMULAIRE DE LOGIN */
@@ -76,17 +82,24 @@ input[type="email"] {
     position: relative;
     background-color: black;
     display: flex;
-    border-radius: 10% 0 0 10%;
+    border-radius: 1% 0 0 1%;
     gap: 10px;
-    width: 60%;
+    width: 60vw;
     padding: 20px;
+    z-index: -1;
+    filter: blur(0.5);
+    background-image: url('/assets/images/wallpaper.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
 }
 
 .information {
     background-color: rgb(188, 255, 255);
     position: absolute;
     display: flex;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: Georgia, Times, serif;
     gap: 25px;
     margin: 20px;
     padding: 8px;
@@ -101,8 +114,8 @@ input[type="email"] {
     align-items: center;
     justify-content: center;
     position: absolute;
-    width: 85%;
-    height: 70%;
+    width: 51vw;
+    height: 65vh;
     z-index: 5;
     left: 50%;
     top: 50%;
@@ -111,6 +124,8 @@ input[type="email"] {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #LOGOTEXT>img {
@@ -149,8 +164,7 @@ input[type="email"] {
 }
 
 .icons {
-    width: 40px;
-    height: 40px;
+    width: 3vw;
     display: flex;
     align-items: center;
     justify-content: center;
