@@ -1,34 +1,77 @@
 {{define "inscription"}}
 <!DOCTYPE html>
 <html>
-<head> 
-	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../assets/styles/connexion.css" >
-	<title>Sign Up</title>
-</head>
-<body >
-	<div class="LoginScreen">
-       <h1>Sign Up Here!</h1>
-	    <form method="POST" action="/treatmentI">
-		
-            <label for="pseudo">Enter your pseudo: </label>
-            <input type="text" id="pseudo" name="pseudo" required>
-            <label for="email">Enter your Email: </label>
-            <input type="email" id="email" name="email" required>
-            <label for="password">Enter your password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <div class="connection">
-                <input type="submit" value="Sign In">
-                 <br>
-              </div>
-        </form>
 
-        <div class="Direction">
-			<a href="/connexion">Or Login Here</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../assets/styles/connexion.css">
+    <title>Sign Up</title>
+</head>
+
+<body>
+    <div class="all">
+        <div class="first">
+            <div id=" text">
+                <p>Etes vous pret pour le voyage musicale?</p><br>
+                <p>Bah allez-y rejoignez nous!!</p>
+            </div>
+
+            <div class="Log">
+                <h1>Sign Up Here!</h1>
+                <form method="POST" action="/treatmentI">
+                    <label for="pseudo">Enter your pseudo: </label>
+                    <input type="text" id="pseudo" name="pseudo" required>
+                    <label for="email">Enter your Email: </label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="password">Enter your password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="connection">
+                        <input type="submit" value="Sign In">
+                        <br>
+                    </div>
+                </form>
+            </div>
+            <div class="Direction">
+                <a href="/connexion">Or Login Here</a>
+            </div>
         </div>
-    </div> 
+
+
+        <div class="second">
+            <div class="information">
+                <div>
+                    <p>About Us</p>
+                </div>
+                <div>
+                    <p>Blog</p>
+                </div>
+                <div>
+                    <p>Contacts</p>
+                </div>
+                <div>
+                    <p>Letters</p>
+                </div>
+            </div>
+
+            <div id="LOGOTEXT">
+            <img src="/assets/icons/Travelling.png" alt="Travelling">
+            </div>
+
+            <div class="socialMedia">
+                <div class="icons"><img src="/assets/icons/twitter.png" alt="twitter">
+                </div>
+                <div class="icons"><img src="/assets/icons/github.png" alt="github">
+                </div>
+                <div class="icons"><img src="/assets/icons/linkedin.png" alt="linkedin">
+                </div>
+                <div class="icons"><img src="/assets/icons/instagram.png" alt="instagram">
+                </div>
+            </div>
+        </div>
+
+    </div>
 </body>
+
 </html>
 {{end}}

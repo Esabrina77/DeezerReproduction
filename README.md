@@ -34,8 +34,7 @@
 <h2>Responsable du Code</h2>
 <ol>
   <li> Sabrina &#128515;</li>
-  <li> Marin &#128515;</li>
 </ol>
 <p><b>ATTENTION :</b> Ne fermez pas le terminal, sinon le serveur s'arrêtera automatiquement. &#128522;</p>
-<p>aucun droit sur les images et les logos</p>
+<p>aucun droit sur les images ,le logo et les produits</p>
 
