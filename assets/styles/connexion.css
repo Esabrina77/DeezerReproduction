@@ -37,11 +37,23 @@ body {
     width: 40vw;
     padding: 20px;
 }
-
+.Kaporal{
+    width: 10vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Kaporal >img{
+    width: 100%;
+    height: 100%;
+    filter: opacity(90%);
+}
 #text {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: calc(0.7em + 1vw);
+    font-family: 'fantasy';
     background-color: tomato;
 }
 
@@ -100,17 +112,15 @@ input[type="email"] {
     display: flex;
     justify-content: center;
     font-family: Georgia, Times, serif;
-    font-size: calc(0.3em + 0.5rem);
-    gap: 25px;
+    font-size: calc(0.4em + 0.6vw);
+    gap: 15px;
     margin: 20px;
     padding: 8px;
-    width: auto;
     top: 0;
     right: 0;
     display: flex;
     margin: 20px;
 }
-
 #LOGOTEXT {
     display: flex;
     align-items: center;
@@ -118,12 +128,12 @@ input[type="email"] {
     position: absolute;
     width: 80%;
     height: 100%;
-    z-index: 2;
+    z-index: 1;
     left: 50%;
     top: 50%;
-    filter: opacity(85%);
+    filter: opacity(70%);
     transform: translate(-50%, -50%);
-    background-image: url('/assets/images/casque.jpg');
+    background-image: url('/assets/images/casque.jpeg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: 120%;
@@ -168,7 +178,7 @@ input[type="email"] {
 }
 
 .icons {
-    width: 3vw;
+    width: 2.5vw;
     display: flex;
     align-items: center;
     justify-content: center;
