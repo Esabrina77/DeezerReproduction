@@ -1,75 +1,96 @@
 {{define "connexion"}}
 <!DOCTYPE html>
 <html>
-<head> 
-	<meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../assets/styles/connexion.css" >
-	<title>Log in</title>
+    <link rel="stylesheet" type="text/css" href="../assets/styles/connexion.css">
+    <title>Log in</title>
 </head>
+
 <body>
     <div class="all">
+        <div id="text">
+            <p>Ah te revoilà!! Tu nous as manqué</p><br>
+        </div>
         <div class="first">
             <div class="Kaporal">
                 <img src="/assets/icons/LOGO.png">
-               </div>
-            <div id=" text">
-                <p>Ah te revoilà</p><br>
-                <p>Tu nous as manqué!!</p>
             </div>
-          
-
             <div class="Log">
-                <h1>Sign Up Here!</h1>
+                <div>
+                    <h1>CONNEXION</h1>
+                </div>
                 <form method="POST" action="/treatmentC">
                     <label for="pseudo">Enter your pseudo: </label>
                     <input type="text" id="pseudo" name="pseudo" required>
                     <label for="password">Enter your password:</label>
                     <input type="password" id="password" name="password" required>
-                     <div class="connection">
-                        <input type="submit" value="Sign In">
+                    <div class="connection">
+                        <input type="submit" value="Vibes">
                         <br>
                     </div>
                 </form>
             </div>
             <div class="Direction">
-                <a href="/inscription">Or Login Here</a>
+                <a href="/inscription">S'inscrire</a>
             </div>
         </div>
 
 
         <div class="second">
             <div class="information">
-                <div>
-                    <p>About Us</p>
-                </div>
-                <div>
-                    <p>Blog</p>
-                </div>
-                <div>
-                    <p>Contacts</p>
-                </div>
-                <div>
-                    <p>Letters</p>
-                </div>
+                <a href="/home">
+                    <div>
+                        <p>About Us</p>
+                    </div>
+                </a>
+                <a href="/home">
+                    <div>
+                        <p>Blog</p>
+
+                    </div>
+                </a>
+                <a href="/home">
+                    <div>
+                        <p>Contacts</p>
+                    </div>
+                </a>
+
+                <a href="/home">
+                    <div>
+                        <p>Letters</p>
+                    </div>
+                </a>
             </div>
 
             <div id="LOGOTEXT">
-            <img src="/assets/icons/Travelling.png" alt="Travelling">
+                <img src="/assets/icons/Travelling.png" alt="Travelling">
             </div>
 
             <div class="socialMedia">
-                <div class="icons"><img src="/assets/icons/twitter.png" alt="twitter">
-                </div>
-                <div class="icons"><img src="/assets/icons/github.png" alt="github">
-                </div>
-                <div class="icons"><img src="/assets/icons/linkedin.png" alt="linkedin">
-                </div>
-                <div class="icons"><img src="/assets/icons/instagram.png" alt="instagram">
-                </div>
+                <a href="/home">
+                    <div class="icons">
+                        <img src="/assets/icons/twitter.png" alt="twitter">
+                    </div>
+                </a>
+
+                <a href="/home">
+                    <div class="icons">
+                        <img src="/assets/icons/github.png" alt="github">
+                    </div>
+                </a>
+
+                <a href="/home">
+                    <div class="icons">
+                        <img src="/assets/icons/linkedin.png" alt="linkedin">
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </body>
+
 </html>
 {{end}}

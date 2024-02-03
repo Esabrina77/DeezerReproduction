@@ -19,55 +19,100 @@ body {
     background-size: cover;
     height: 100vh;
 }
-
 .all {
+    background-color: rgba(255, 255, 255, 0.025);
     display: flex;
-   gap: 10px;
-   background-color: rgb(255, 0, 0);
+    position: relative;
+    gap: 10px;
     height: 85%;
     width: 69%;
-}
-
-.first {
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.598)70%, rgba(56, 56, 56, 0.078));
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    width: 40vw;
-    padding: 20px;
-}
-.Kaporal{
-    width: 10vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.Kaporal >img{
-    width: 100%;
-    height: 100%;
-    filter: opacity(90%);
-}
-#text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(0.7em + 1vw);
-    font-family: 'fantasy';
-    background-color: tomato;
+    margin: 10% auto;
+    border-radius: 10px;
+    padding: 2%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 .Log {
     color: black;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 60%;
+    max-width: 80%;
+    transform: translate(-50%, -60%);
+    gap: 1vh;
+    margin-top: 8%;
+    height: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    padding: 2%;
+    overflow-y: calc();
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+.first {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.598) 70%, rgba(56, 56, 56, 0.078));
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    gap: 10px;
+    width: 40vw;
+    padding: 20px;
+    width: 40vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+#text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    height: 10vh;
+    z-index:2;
+    left: 0;
+    bottom: 27%;
+}
+#text p {
+    color: white;
+    font-size: calc(0.4em + 0.7vw);
+    font-family:Roboto;
+    width: 2vw;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    display: inline-block;
+    transform: rotate(-90deg);
+    white-space: nowrap;
+  }
 
+.Kaporal{
+    width: 15vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 11vw;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+.Kaporal >img{
+    width: 100%;
+    height: 100%;
+    filter: opacity(90%);
+}
+h1{
+    font-size: calc(0.7em + 1vw);
+    font-family:'Trebuchet MS', sans-serif;
+    align-items: center;
+}
 /*FORMULAIRE DE LOGIN */
 form {
     display: flex;
+    align-items: center;
     flex-direction: column;
-    background-color: tomato;
+    margin-top: 5%;
 }
 
 label,
@@ -76,11 +121,16 @@ input {
 }
 
 label {
-    font-size: calc(0.5em + 0.7rem);
+    font-family: Georgia, Times, serif;
+    width: 13vw;
+    font-size: calc(0.4em + 0.6vw);
     margin-bottom: 10px;
-    align-self: center;
     color: black;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+
+
 }
 
 input[type="text"],
@@ -88,13 +138,57 @@ input[type="password"],
 input[type="email"] {
     padding: 5px;
     font-size: calc(0.5rem + 0.7em);
+    width: 17vw;
     border: none;
     border-radius: 10px;
     border: ridge;
-    margin-bottom: 15px;
-
+    width: 17vw;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+input[type="submit"]{
+    margin: 3vh;
+    border-radius: 25% 50%;
+    color: rgb(9, 106, 113);
+    background-color: rgba(0, 0, 0, 0.776);
+    font-size: calc(0.4em + 0.6vw);
+    font-family:Roboto;
+    padding: 3px;
+}
+.Direction a {
+    text-decoration: none;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: rgb(17, 163, 173);
+}
+.Direction:hover{
+    color: rgb(48, 241, 225);
+    background-color: rgb(0, 0, 0);
+}
+.Direction{
+    font-size: calc(0.4em + 0.6vw);
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+    display: flex;
+    position: absolute;
+    border-radius: 20px 4px 2px 20px;
+    background-color: rgba(0, 0, 0, 0.584);
+    padding: 5px;
+    bottom: 0;
+    right: 0;
+    animation: pulseAnimation 1.5s linear infinite;
 }
 
+@keyframes pulseAnimation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
 /*2eme PORTION*/
 .second {
     position: relative;
@@ -102,17 +196,19 @@ input[type="email"] {
     border-radius: 10% 0 0 10%;
     gap: 10px;
     width: 75%;
+    margin-left: auto;
+    margin-right: auto;
     padding: 20px;
     background: linear-gradient(to right, rgba(27, 27, 27, 0.078)10%, black 100%);
 }
 
 .information {
-    background-color: rgb(188, 255, 255);
     position: absolute;
     display: flex;
     justify-content: center;
     font-family: Georgia, Times, serif;
     font-size: calc(0.4em + 0.6vw);
+    color: white;
     gap: 15px;
     margin: 20px;
     padding: 8px;
@@ -120,6 +216,9 @@ input[type="email"] {
     right: 0;
     display: flex;
     margin: 20px;
+}
+.information  a:hover{
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.598) 70%, rgba(56, 56, 56, 0.078));
 }
 #LOGOTEXT {
     display: flex;
@@ -179,6 +278,8 @@ input[type="email"] {
 
 .icons {
     width: 2.5vw;
+    margin-top: 1%;
+    margin-bottom: 1%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,4 +289,54 @@ input[type="email"] {
 .icons>img {
     width: 100%;
     height: 100%;
+}
+@media only screen and (max-height: 525px) {
+    .Log {
+        overflow-y: auto;
+    }
+    .information{
+        font-size: calc(0.3em + 0.4vw);
+    }
+    #text p {
+        font-size: calc(0.3em + 0.5vw);
+    }
+    
+}
+
+@media only screen and (max-width: 480px) {
+    .Log {
+        margin-top: 20%;
+        padding: 10%;
+        overflow: hidden;
+    }
+    .all {
+        margin: 10% auto;
+        padding: 10%;
+    }
+
+    .first {
+        width: 90vw;
+    }
+
+    #text p {
+        width: 15vw;
+    }
+
+    .Kaporal {
+        width: 40vw;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        width: 50vw;
+    }
+
+    .second {
+        width: 90%;
+    }
+
+    .icons {
+        width: 8vw;
+    }
 }
