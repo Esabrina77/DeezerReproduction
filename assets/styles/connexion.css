@@ -136,8 +136,9 @@ label {
 input[type="text"],
 input[type="password"],
 input[type="email"] {
+    font-family: Georgia, 'Times New Roman', Times, serif;
     padding: 5px;
-    font-size: calc(0.5rem + 0.7em);
+    font-size: calc(0.7rem + 0.8vh);
     width: 17vw;
     border: none;
     border-radius: 10px;
@@ -205,6 +206,7 @@ input[type="submit"]{
 .information {
     position: absolute;
     display: flex;
+    z-index: 5;
     justify-content: center;
     font-family: Georgia, Times, serif;
     font-size: calc(0.4em + 0.6vw);
@@ -217,8 +219,9 @@ input[type="submit"]{
     display: flex;
     margin: 20px;
 }
-.information  a:hover{
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.598) 70%, rgba(56, 56, 56, 0.078));
+.information > a {
+text-decoration: none;
+color: white;
 }
 #LOGOTEXT {
     display: flex;
@@ -299,6 +302,7 @@ input[type="submit"]{
     }
     #text p {
         font-size: calc(0.3em + 0.5vw);
+        display: none;
     }
     
 }
