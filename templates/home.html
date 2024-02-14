@@ -1,28 +1,51 @@
 {{define "home"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Welcome Guys</title>
 </head>
+
 <body>
-    <h1>Sélectionnez un genre musical :</h1>
-    <form action="/genre" method="GET">
-        <select name="genre">
-            <option value="pop">Pop</option>
-            <option value="rock">Rock</option>
-            <option value="hip-hop">Hip Hop</option>
-            <!-- Ajoutez d'autres options de genres -->
-        </select>
-        <button type="submit">Afficher</button>
-    </form>
-    
-    <h1>welcome to deezer</h1>
-    <a href="/radio">radios</a>
-    <a href="/artists">radios</a>
-    <a href="/editorial">editorials</a>
-    <a href="/search">search</a>
+    <div class="all">
+        <div class="search">
+            <p>barre de recherche</p>
+        </div>
+        <div class="Box">
+            <p>box box</p>
+        </div>
+
+        <div class="FamousSong">
+            <div class="infosSong">
+                <h2>Musique la plus écoutée </h2>
+                <h1>Description : {{.Description}}</h1>
+                <h1>Titre: {{.TopTrack.Title}}</h1>
+                <h2>Artiste: {{.TopTrack.Artist.Name}}</h2>   
+                <h1>{{.TopTrack.Duration}} sec</h1>
+            </div>
+            <div class="imageSon">
+                <img src="{{.TopTrack.Album.CoverMedium}}" alt="{{.TopTrack.Album.CoverMedium}}">
+            </div> 
+        </div>
+
+        <div class="Charts">
+            {{range .TopArtists}}
+            <div class="ChartArtist">
+                <h2>{{.Name}}</h2>
+                <img src="{{.Picture}}" alt="{{.Name}}" />
+            </div>
+            {{end}}
+        </div>
+
+        <h1>Library</h1>
+        <a href="/radio">radios</a>
+        <a href="/artists">artists</a>
+        <a href="/editorial">editorials</a>
+        <a href="/search">search</a>
+    </div>
 </body>
+
 </html>
 {{end}}

@@ -13,8 +13,17 @@ type LoginUser struct {
 	Password string `json:"password"`
 	Pseudo   string `json:"pseudo"`
 }
+type Description struct {
+	Phrases []string `json:"phrases"`
+}
 
 var ListUser []LoginUser
+
+// structures pour les charts
+type Charts struct {
+	Artist ArtistResponse `json:"artists"`
+	Tracks TrackResponse  `json:"tracks"`
+}
 
 // STRUCTURES POUR LES ARTISTS
 type ArtistResponse struct {
@@ -152,9 +161,28 @@ type PlaylistResponse struct {
 	Album                 Album  `json:"album"`
 	Type                  string `json:"type"`
 }
+
+// structures des tracks
+type TrackResponse struct {
+	Data []Tracks `json:"data"`
+}
 type Tracks struct {
-	Data     []Playlist `json:"data"`
-	Checksum string     `json:"checksum"`
+	ID                    int     `json:"id"`
+	Readable              bool    `json:"readable"`
+	Title                 string  `json:"title"`
+	TitleShort            string  `json:"title_short"`
+	TitleVersion          string  `json:"title_version,omitempty"`
+	Link                  string  `json:"link"`
+	Duration              int     `json:"duration"`
+	Rank                  int     `json:"rank"`
+	ExplicitLyrics        bool    `json:"explicit_lyrics"`
+	ExplicitContentLyrics int     `json:"explicit_content_lyrics"`
+	ExplicitContentCover  int     `json:"explicit_content_cover"`
+	Preview               string  `json:"preview"`
+	Md5Image              string  `json:"md5_image"`
+	Artist                *Artist `json:"artist"`
+	Album                 Album   `json:"album"`
+	Type                  string  `json:"type"`
 }
 
 // STRUCTURE DES ALBUMS
@@ -185,28 +213,6 @@ type Album struct {
 	ExplicitContentCover  int    `json:"explicit_content_cover"`
 	Artist                Artist `json:"artist"`
 	Type                  string `json:"type"`
-	Tracks                Tracks `json:"tracks"`
-}
-type DataAlbums struct {
-	ID                    int    `json:"id"`
-	Readable              bool   `json:"readable"`
-	Title                 string `json:"title"`
-	TitleShort            string `json:"title_short"`
-	TitleVersion          string `json:"title_version"`
-	Link                  string `json:"link"`
-	Duration              int    `json:"duration"`
-	Rank                  int    `json:"rank"`
-	ExplicitLyrics        bool   `json:"explicit_lyrics"`
-	ExplicitContentLyrics int    `json:"explicit_content_lyrics"`
-	ExplicitContentCover  int    `json:"explicit_content_cover"`
-	Preview               string `json:"preview"`
-	Md5Image              string `json:"md5_image"`
-	Artist                Artist `json:"artist"`
-	Album                 Album  `json:"album"`
-	Type                  string `json:"type"`
-}
-type TracksAlbums struct {
-	Data []DataAlbums `json:"data"`
 }
 
 func RetrieveUser() []LoginUser {

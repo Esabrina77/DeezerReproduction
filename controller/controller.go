@@ -1,14 +1,17 @@
 package controller
 
 import (
-	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"groupieTrack/manager"
 	inittemplate "groupieTrack/templates"
 	"log"
+	"math/rand"
 	"net/http"
+	"os"
+	"strings"
+	"time"
 
 	"github.com/gorilla/sessions"
 )
@@ -35,10 +38,6 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 func RessourceNotFoundHandler(w http.ResponseWriter, r *http.Request) {
 
 	inittemplate.Temp.ExecuteTemplate(w, "notFound", nil)
-}
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-
-	inittemplate.Temp.ExecuteTemplate(w, "home", nil)
 }
 func ConnexionHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -92,7 +91,7 @@ func TreatInscriptionHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, "/story?success=Login_registred", http.StatusFound)
+		http.Redirect(w, r, "/home?success=Login_registred", http.StatusFound)
 	}
 }
 func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
@@ -134,7 +133,7 @@ func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, "/story", http.StatusFound)
+		http.Redirect(w, r, "/home", http.StatusFound)
 	} else {
 		//rediriger vers la page de connexion avec un message d'erreur
 		http.Redirect(w, r, "/connexion?error=invalid_login_try_again", http.StatusFound)
@@ -174,4 +173,50 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 }
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "search", nil)
+}
+
+// page d'acceuil
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
+
+	response, err := http.Get("https://api.deezer.com/chart")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+
+	var charts manager.Charts
+	err = json.NewDecoder(response.Body).Decode(&charts)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Récuperer la musique la plus ecouter
+	topTrack := charts.Tracks.Data[0]
+	//Récuperer les 10 artistes les plus écouter en france
+	topArtists := charts.Artist.Data[:10]
+	for _, artist := range topArtists {
+		fmt.Println("Nom de l'artiste:", artist.Name)
+		fmt.Println("Photo de l'artiste:", artist.PictureMedium)
+	}
+	//Lecture du fichier Description.txt
+	descript, err := os.ReadFile("Description.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	description := manager.Description{
+		Phrases: strings.Split(string(descript), "\n"),
+	}
+	//génération d'un nombre aléatiore
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(description.Phrases))
+
+	data := struct {
+		TopTrack    manager.Tracks
+		TopArtists  []manager.Artist
+		Description string
+	}{
+		TopTrack:    topTrack,
+		TopArtists:  topArtists,
+		Description: description.Phrases[randomIndex],
+	}
+	inittemplate.Temp.ExecuteTemplate(w, "home", data)
 }
