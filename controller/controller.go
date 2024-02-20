@@ -16,8 +16,12 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-const Port = "localhost:8080"
-const deezerAPI = "https://api.deezer.com"
+const (
+	Port            = "localhost:8080"
+	deezerAPI       = "https://api.deezer.com"
+	StripePublicKey = "pk_test_51OkP9QKa0BEOKwek4AcHZOLCTI4gsDDZSCzWGrRjQt8hHy8sCueAiNxxwnjbUAPfEEtOXRiJ72nF2oO5puW0G8oW00efoSjW1x"
+	StripeSecretKey = "sk_test_51OkP9QKa0BEOKwekOTKYJaJQPDSwfMmT4Fb8PtYYKgixcOyL5II3106UbajXitNMxy4MUAs767XG21ZE8JId4wKt00El13BkiO"
+)
 
 var store = sessions.NewCookieStore([]byte(SecretKey()))
 
@@ -169,7 +173,7 @@ func GenreHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
-	inittemplate.Temp.ExecuteTemplate(w, "artists", nil)
+	inittemplate.Temp.ExecuteTemplate(w, "artist", nil)
 }
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "search", nil)
@@ -219,4 +223,21 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		Description: description.Phrases[randomIndex],
 	}
 	inittemplate.Temp.ExecuteTemplate(w, "home", data)
+}
+
+func SuccesHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Afficher la page HTML de confirmation
+	fmt.Fprintf(w, "<h1>Paiement réussi</h1>")
+	fmt.Fprintf(w, "<p>Merci pour votre paiement ! Votre commande a été traitée avec succès.</p>")
+
+	inittemplate.Temp.ExecuteTemplate(w, "success", nil)
+}
+
+func CancelHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Afficher la page HTML d'annulation
+	fmt.Fprintf(w, "<h1>Paiement annulé</h1>")
+	fmt.Fprintf(w, "<p>Vous avez annulé votre paiement. Si vous avez des questions, veuillez nous contacter.</p>")
+	inittemplate.Temp.ExecuteTemplate(w, "cancel", nil)
 }

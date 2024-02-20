@@ -5,46 +5,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../assets/styles/home.css">
     <title>Welcome Guys</title>
 </head>
 
 <body>
     <div class="all">
-        <div class="search">
-            <p>barre de recherche</p>
+        <div class="first">
+            <div class="Kaporal">
+                <img src="/assets/icons/LOGO.png">
+            </div>
+            <div class="library">   
+            <h1>Library</h1>
+            <a href="/radio">radios</a>
+            <a href="/podcast">Podcasts</a>
+            <a href="/artists">artists</a>
+            <a href="/editorial">editorials</a>
+            <h1>Ma musique</h1>
+            <a href="/favoris">Mes Favoris</a>
         </div>
-        <div class="Box">
-            <p>box box</p>
-        </div>
+    </div>
 
+<div class="second">
+    <div class="search">
+        <p>barre de recherche</p>
+        <form action="/search" method="GET">
+            <input type="text" name="query" placeholder="recherche..." />
+            <button type="submit"><img src="/assets/icons/loupe.png" alt="loupe"></button>
+        </for m>
+    </div>
+    <div class="TopALL">
+    <div class="Top">
         <div class="FamousSong">
             <div class="infosSong">
-                <h2>Musique la plus écoutée </h2>
-                <h1>Description : {{.Description}}</h1>
+                <p>Musique la plus écoutée </p>
                 <h1>Titre: {{.TopTrack.Title}}</h1>
-                <h2>Artiste: {{.TopTrack.Artist.Name}}</h2>   
-                <h1>{{.TopTrack.Duration}} sec</h1>
+                <div class="Description">
+                <h3>Description : {{.Description}}</h3>
+                </div>
+                <h2>Artiste: {{.TopTrack.Artist.Name}}</h2>
+                <h4>Durée: {{.TopTrack.Duration}} sec</h4>
             </div>
             <div class="imageSon">
                 <img src="{{.TopTrack.Album.CoverMedium}}" alt="{{.TopTrack.Album.CoverMedium}}">
-            </div> 
+            </div>
         </div>
 
+    <div class="textArt">
+        <p>ARTISTES DU MOMENT</p>
+    </div>
         <div class="Charts">
             {{range .TopArtists}}
             <div class="ChartArtist">
-                <h2>{{.Name}}</h2>
-                <img src="{{.Picture}}" alt="{{.Name}}" />
-            </div>
+                 <img src="{{.Picture}}" alt="{{.Name}}" />
+                
+                 <div class="name"><h2>{{.Name}}</h2>   
+                 </div>
+                </div>
             {{end}}
         </div>
-
-        <h1>Library</h1>
-        <a href="/radio">radios</a>
-        <a href="/artists">artists</a>
-        <a href="/editorial">editorials</a>
-        <a href="/search">search</a>
+        <
     </div>
+    <div class="FavoirsArt">
+        <p>Likés récements</p>
+    </div>
+</div>
+    </div>
+</div>
 </body>
 
 </html>

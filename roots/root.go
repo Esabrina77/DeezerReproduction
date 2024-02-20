@@ -11,9 +11,13 @@ func InitServe() {
 	FileServer := http.FileServer(http.Dir("assets"))
 	http.Handle("/assets/", http.StripPrefix("/assets/", FileServer))
 	http.HandleFunc("/home", controller.HomeHandler)
+
 	http.HandleFunc("/genre", controller.GenreHandler)
 
-	http.HandleFunc("/artists", controller.ArtistsHandler)
+	http.HandleFunc("/artist", controller.ArtistsHandler)
+	http.HandleFunc("/cancel", controller.CancelHandler)
+	http.HandleFunc("/succes", controller.SuccesHandler)
+
 	http.HandleFunc("/radio", controller.RadiosHandler)
 	http.HandleFunc("/editorial", controller.EditorialsHandler)
 	http.HandleFunc("/search", controller.SearchHandler)
