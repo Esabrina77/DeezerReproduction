@@ -47,23 +47,6 @@ type Artist struct {
 	Type          string `json:"type"`
 }
 
-// STRUCTURES POUR LES OPTIONS
-type Options struct {
-	Streaming         bool   `json:"streaming"`
-	StreamingDuration int    `json:"streaming_duration"`
-	Offline           bool   `json:"offline"`
-	Hq                bool   `json:"hq"`
-	AdsDisplay        bool   `json:"ads_display"`
-	AdsAudio          bool   `json:"ads_audio"`
-	TooManyDevices    bool   `json:"too_many_devices"`
-	CanSubscribe      bool   `json:"can_subscribe"`
-	RadioSkips        int    `json:"radio_skips"`
-	Lossless          bool   `json:"lossless"`
-	Preview           bool   `json:"preview"`
-	Radio             bool   `json:"radio"`
-	Type              string `json:"type"`
-}
-
 // STRUCTURES POUR LES RADIOS
 type RadioResponse struct {
 	Data []Radio `json:"data"`
@@ -274,3 +257,5 @@ func PrintColorResult(color string, message string) {
 	}
 	fmt.Printf("%s%s\033[0m", colorCode, message)
 }
+
+//RECUP DES INFOS D'un artiste

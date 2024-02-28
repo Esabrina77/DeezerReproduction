@@ -9,7 +9,6 @@
     <title>Sign Up</title>
 </head>
 
-
 <body>
     <div class="all">
         <div id="text">
@@ -19,8 +18,26 @@
             <div class="Kaporal">
                 <img src="/assets/icons/LOGO.png">
             </div>
+            <div class="information">
+            <nav class="navbar">
+                <div class="ham" >
+                <span class="bar1"></span>
+                <span class="bar2"></span>
+                <span class="bar3"></span>
+                </div>
+                <ul class="nav-sub">
+                <li class="list-item"><a href="#" class="nav-link">About Us</a></li>
+                <li class="list-item"><a href="#" class="nav-link">Blog</a></li>
+                <li class="list-item"><a href="#" class="nav-link">Contact</a></li>  
+                <li class="list-item"><a href="#" class="nav-link">Letters</a></li>  
+            </ul>
+                </nav>
+        </div>
+        
             <div class="Log">
-                <div></div><h1>INSCRIPTION</h1>
+                <div>
+                    <h1>CONNEXION</h1>
+                </div>
                 <form method="POST" action="/treatmentI">
                     <label for="pseudo">Enter your pseudo: </label>
                     <input type="text" id="pseudo" name="pseudo" required>
@@ -35,42 +52,37 @@
                 </form>
             </div>
             <div class="Direction">
-                <a href="/connexion">se connecter</a>
+                <a href="/connexion">Se connecter</a>
             </div>
         </div>
 
 
         <div class="second">
             <div class="information">
-                <div>
-                    <p>About Us</p>
-                </div>
-                <div>
-                    <p>Blog</p>
-                </div>
-                <div>
-                    <p>Contacts</p>
-                </div>
-                <div>
-                    <p>Letters</p>
-                </div>
+                <a href="/home">About Us</a>
+                <a href="/home">Blog</a>
+                <a href="/home">Contacts</a>
+                <a href="/home">Letters</a>
             </div>
-
             <div id="LOGOTEXT">
                 <img src="/assets/icons/Travelling.png" alt="Travelling">
             </div>
 
             <div class="socialMedia">
-                <div class="icons"><img src="/assets/icons/twitter.png" alt="twitter">
-                </div>
-                <div class="icons"><img src="/assets/icons/github.png" alt="github">
-                </div>
-                <div class="icons"><img src="/assets/icons/linkedin.png" alt="linkedin">
-                </div>
+                <a href="/home"><img src="/assets/icons/twitter.png" alt="twitter"></a>
+                <a href="/home"><img  src="/assets/icons/github.png" alt="github"></a>
+                <a href="/radio"><img src="/assets/icons/linkedin.png" alt="linkedin"></a>
             </div>
         </div>
     </div>
 </body>
-
+<script>
+ const hamburger = document.querySelector(".ham");  
+ const navsub = document.querySelector(".nav-sub");  
+ hamburger.addEventListener('click', () => {  
+  hamburger.classList.toggle("change")  
+  navsub.classList.toggle("nav-change")  
+ });  
+</script>
 </html>
 {{end}}

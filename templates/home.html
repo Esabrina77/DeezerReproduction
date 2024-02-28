@@ -15,63 +15,119 @@
             <div class="Kaporal">
                 <img src="/assets/icons/LOGO.png">
             </div>
-            <div class="library">   
-            <h1>Library</h1>
-            <a href="/radio">radios</a>
-            <a href="/podcast">Podcasts</a>
-            <a href="/artists">artists</a>
-            <a href="/editorial">editorials</a>
-            <h1>Ma musique</h1>
-            <a href="/favoris">Mes Favoris</a>
-        </div>
-    </div>
-
-<div class="second">
-    <div class="search">
-        <p>barre de recherche</p>
-        <form action="/search" method="GET">
-            <input type="text" name="query" placeholder="recherche..." />
-            <button type="submit"><img src="/assets/icons/loupe.png" alt="loupe"></button>
-        </for m>
-    </div>
-    <div class="TopALL">
-    <div class="Top">
-        <div class="FamousSong">
-            <div class="infosSong">
-                <p>Musique la plus écoutée </p>
-                <h1>Titre: {{.TopTrack.Title}}</h1>
-                <div class="Description">
-                <h3>Description : {{.Description}}</h3>
-                </div>
-                <h2>Artiste: {{.TopTrack.Artist.Name}}</h2>
-                <h4>Durée: {{.TopTrack.Duration}} sec</h4>
-            </div>
-            <div class="imageSon">
-                <img src="{{.TopTrack.Album.CoverMedium}}" alt="{{.TopTrack.Album.CoverMedium}}">
+            <div class="library">
+                <h1>Library</h1>
+                <a href="/radio">radios</a>
+                <a href="/podcast">Podcasts</a>
+                <a href="/artist">artists</a>
+                <a href="/editorial">editorials</a>
+                <h1>Ma musique</h1>
+                <a href="/favoris">Mes Favoris</a>
             </div>
         </div>
 
-    <div class="textArt">
-        <p>ARTISTES DU MOMENT</p>
-    </div>
-        <div class="Charts">
-            {{range .TopArtists}}
-            <div class="ChartArtist">
-                 <img src="{{.Picture}}" alt="{{.Name}}" />
-                
-                 <div class="name"><h2>{{.Name}}</h2>   
-                 </div>
+        <div class="second">
+            <div class="search">
+                <p>barre de recherche</p>
+                <form action="/search" method="GET">
+                    <input type="text" name="query" placeholder="recherche..." />
+                    <button type="submit"><img src="/assets/icons/loupe.png" alt="loupe"></button>
+                </form>
+            </div>
+            <div class="TopALL">
+                <div class="Top">
+                    <div class="FamousSong">
+                        <div class="infosSong">
+                            <p>Musique la plus écoutée </p>
+                            <h1>Titre: {{.TopTrack.Title}}</h1>
+                            <div class="Description">
+                                <h3>Description : {{.Description}}</h3>
+                            </div>
+                            <h2>Artiste: {{.TopTrack.Artist.Name}}</h2>
+                            <h4>Durée: {{.TopTrack.Duration}} sec</h4>
+                            <a href="{{.TopTrack.Preview}}" id="playMusic">Ecouter maintenant</a>
+                            <h6>Explicit Lyrics: {{.TopTrack.ExplicitLyrics}}</h6>
+                        </div>
+                        <div class="imageSon">
+                            <img src="{{.TopTrack.Album.CoverMedium}}" alt="{{.TopTrack.Album.CoverMedium}}">
+                        </div>
+                    </div>
+
+                    <div class="textArt">
+                        <p>ARTISTES DU MOMENT</p>
+                    </div>
+                    <div class="Charts">
+                        <div class="prev-arrow" onclick="showNextArtists(-1)">&#10094;</div>
+                        <div class="next-arrow" onclick="showNextArtists(1)">&#10095;</div>
+
+                        {{range .TopArtists}}
+                        <div class="ChartArtist">
+                            <div class="ChartArtist-image">
+                                <a href="/artist/{{.ID}}"> <img src="{{.Picture}}" alt="{{.Name}}" /></a>
+                            </div>
+                            <div class="name">
+                                <h2>{{.Name}}</h2>
+                            </div>
+                        </div>
+                        {{end}}
+                    </div>
+                    <!-- jouer de la musique -->
+                    <div class="play-music">
+                        <audio id="audioPlayer" controls>
+                            <source id="audioSource" type="audio/mp3">
+                            Format non pris en Charge.
+                        </audio>
+                    </div>
                 </div>
-            {{end}}
+                <div class="FavoirsArt">
+                    <p>Likés récements</p>
+                </div>
+            </div>
         </div>
-        <
     </div>
-    <div class="FavoirsArt">
-        <p>Likés récements</p>
-    </div>
-</div>
-    </div>
-</div>
+
+    <script>
+        let currentArtistIndex = 0;
+        const artists = document.querySelectorAll('.ChartArtist');
+        function showNextArtists(direction) {
+            currentArtistIndex += direction;
+            if (currentArtistIndex < 0) {
+                currentArtistIndex = 0;
+            } else if (currentArtistIndex >= artists.length) {
+                currentArtistIndex = artists.length - 1;
+            }
+            for (let i = 0; i < artists.length; i++) {
+                if (i < currentArtistIndex || i >= currentArtistIndex + 3) {
+                    artists[i].style.display = 'none';
+                } else {
+                    artists[i].style.display = 'flex';
+                }
+            }
+        }
+        showNextArtists(0);
+
+
+        //JOUER DE LA MUSIQUE
+        //Recup  des elements des boutouns play
+        const playMusic = document.getElementById('playMusic');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioSource = document.getElementById('audioSource');
+        const progressBar = document.getElementById('progressBar');
+
+        // donner une action à chaque bouton
+        playMusic.addEventListener('click', (event) => {
+            event.preventDefault(); // Empêche la redirection par défaut du lien
+            const audioURL = playMusic.href;
+            audioSource.src = audioURL;
+            audioPlayer.load(); // Charge la piste audio
+            audioPlayer.play(); // Lecture de la piste audio chargée
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.value = percentage;
+        });
+    </script>
 </body>
 
 </html>

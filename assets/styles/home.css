@@ -11,9 +11,9 @@ body {
     height: 100vh;
     width: 100vw;
     background-image: url('/assets/images/maxresdefault.jpg');
-    background-size:cover;
+    background-size: cover;
     background-position: center;
-    background-position-y:100%;
+    background-position-y: 100%;
     background-repeat: no-repeat;
     background-clip: border-box;
 }
@@ -22,7 +22,7 @@ body {
     background-color: rgba(72, 71, 71, 0.815);
     display: flex;
     gap: 10px;
-    height:97vh;
+    height: 97vh;
     width: 91%;
     margin: 5vh;
     border-radius: 25px;
@@ -68,22 +68,25 @@ body {
     flex-direction: row;
     max-width: 100%;
     height: 93vh;
-    background-color: cornflowerblue;
+
 }
 
 .Top {
     width: 70%;
-    height:100%;
+    height: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: tomato;
 }
 
 /*favORIS*/
 .FavoirsArt {
-    height: 100%;
+    height: 97%;
+    margin-top: 3vh;
+    margin-bottom: 2px;
     width: 30%;
+    background-color: khaki;
+    border-radius: 25px;
 }
 
 /*Recherche*/
@@ -133,9 +136,10 @@ button[type="submit"] {
     justify-content: center;
     border-radius: 25px;
     background-image: url('/assets/images/wallpaper.jpg');
-    max-width: 100%;
+    max-width: 90%;
     height: 40vh;
     color: white;
+    margin-top: 3vh;
     padding: 2vh;
     gap: 1vh;
     font-size: calc(0.4em + 0.5vw);
@@ -160,7 +164,6 @@ button[type="submit"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: brown;
 }
 
 .imageSon>img {
@@ -181,12 +184,12 @@ button[type="submit"] {
 .Charts {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
-    background-color: aqua;
-    height: 35vh;
-    padding: 1.5vh;
+    height: 30vh;
+    padding: 2vh 1vw;
     gap: 2vw;
-    overflow-x: hidden;
+    position: relative;
 }
 
 .ChartArtist {
@@ -194,25 +197,66 @@ button[type="submit"] {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: darkblue;
-    height:23vh ;
-    width:12vw ;
+    gap: 1vh;
+    border-radius: 50px;
+    padding: 1vw;
+    height: 23vh;
+    width: 12vw;
 }
 
-.ChartArtist>img {
-    padding:0.5vw;
-    width: 7vw;
-    border-radius: 50%;
-}
-
-.name {
-   font-style: oblique;
-   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ;
-    font-size: calc(0.5rem + 0.8vh);
+.ChartArtist-image {
+    width: 8vw;
+    padding:0.4vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    padding: 0.4vw;
+}
+
+.ChartArtist-image>img {
+    width: 100%;
+    height: 100%;
+    border-radius:50%;
+}
+
+.name {
+    font-style: oblique;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: calc(0.4rem + 0.5vh);
+    display: flex;
+    text-align: center;
+    padding: 0.2vw;
+}
+
+/*les fleches*/
+.prev-arrow,
+.next-arrow {
+    width: 2.3vw;
+    height: 4vh;
+    padding: 1vh 1vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.prev-arrow:hover,
+.next-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-arrow {
+    left: -5%;
+}
+
+.next-arrow {
+    right: -5%;
 }
