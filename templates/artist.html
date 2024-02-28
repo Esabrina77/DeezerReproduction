@@ -1,4 +1,4 @@
-{{define "artist-Info"}}
+{{define "artist"}}
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html>
@@ -6,24 +6,13 @@
     <title>Détails de l'artiste</title>
 </head>
 <body>
+  <div id="artistDetails">
     <h1>Détails de l'artiste</h1>
-
-    <h2>{{.Artist.Name}}</h2>
-    <img src="{{.Artist.Picture}}" alt="Photo de l'artiste">
-
-    <h3>Albums</h3>
-    <ul>
-        {{range .Albums}}
-        <li>
-            <h4>{{.Title}}</h4>
-            <img src="{{.CoverMedium}}" alt="Couverture de l'album">
-            <p>Genre: {{range .Genres}}{{.Name}}, {{end}}</p>
-            <p>Date de sortie: {{.ReleaseDate}}</p>
-            <p>Nombre de pistes: {{.NbTracks}}</p>
-            <p>Durée: {{.Duration}} secondes</p>
-        </li>
-        {{end}}
-    </ul>
+    <p>Nom: {{.Artist.Name}}</p>
+    <p>ID: {{.Artist.ID}}</p>
+    <p>Nombre d'albums: {{.Artist.NbAlbum}}</p>
+    <p>Nombre de fans: {{.Artist.NbFan}}</p>
+</div>
 </body>
 </html>
 {{end}}

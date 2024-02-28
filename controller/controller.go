@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"groupieTrack/manager"
 	inittemplate "groupieTrack/templates"
@@ -237,51 +236,6 @@ func extractArtistID(urlPath string) int {
 	}
 	return artistID
 }
-
-func getArtistDetails(artistID int) (manager.Artist, error) {
-	// Faites une requête HTTP pour récupérer les détails de l'artiste à partir de l'ID
-	response, err := http.Get("https://api.example.com/artists/" + "artistID")
-	if err != nil {
-		return manager.Artist{}, err
-	}
-	defer response.Body.Close()
-
-	// Vérifiez le code de statut de la réponse
-	if response.StatusCode != http.StatusOK {
-		return manager.Artist{}, errors.New("artiste non trouvé")
-	}
-
-	// Analysez la réponse JSON dans la structure `manager.Artist`
-	var artist manager.Artist
-	err = json.NewDecoder(response.Body).Decode(&artist)
-	if err != nil {
-		return manager.Artist{}, err
-	}
-
-	return artist, nil
-}
-func getArtistAlbums(artistID int) ([]manager.Album, error) {
-	response, err := http.Get("https://api.example.com/artists/" + strconv.Itoa(artistID) + "/albums")
-	if err != nil {
-		return nil, err
-	}
-	defer response.Body.Close()
-
-	// Vérifiez le code de statut de la réponse
-	if response.StatusCode != http.StatusOK {
-		return nil, errors.New("erreur lors de la récupération des albums de l'artiste")
-	}
-
-	// Analysez la réponse JSON dans une structure ou une slice de `manager.Album`
-	var albums []manager.Album
-	err = json.NewDecoder(response.Body).Decode(&albums)
-	if err != nil {
-		return nil, err
-	}
-
-	return albums, nil
-}
-
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	artistID := extractArtistID(r.URL.Path)
 	if artistID == -1 {
@@ -289,27 +243,45 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	artist, err := getArtistDetails(artistID)
+	// Faites une requête HTTP pour récupérer les détails de l'artiste à partir de l'API Deezer
+	response, err := http.Get("https://api.deezer.com/artist/" + strconv.Itoa(artistID))
 	if err != nil {
+		fmt.Println("Erreur lors de la requête :", err)
+		http.Error(w, "Erreur lors de la requête", http.StatusInternalServerError)
+		return
+	}
+	defer response.Body.Close()
+
+	// Vérifiez le code de statut de la réponse
+	if response.StatusCode != http.StatusOK {
+		fmt.Println("Artiste non trouvé")
 		http.Error(w, "Artiste non trouvé", http.StatusNotFound)
 		return
 	}
 
-	albums, err := getArtistAlbums(artistID)
+	// Analysez la réponse JSON dans la structure `Artist`
+	var artist manager.Artist
+	err = json.NewDecoder(response.Body).Decode(&artist)
 	if err != nil {
-		http.Error(w, "Erreur lors de la récupération des albums de l'artiste", http.StatusInternalServerError)
+		fmt.Println("Erreur lors de l'analyse de la réponse JSON :", err)
+		http.Error(w, "Erreur lors de l'analyse de la réponse JSON", http.StatusInternalServerError)
 		return
 	}
 
-	// Préparez les données à envoyer au template
-	data := struct {
-		Artist manager.Artist
-		Albums []manager.Album
-	}{
-		Artist: artist,
-		Albums: albums,
+	// Vérifiez si des données d'artiste ont été renvoyées
+	if artist.ID == 0 {
+		fmt.Println(artistID, "<---- ID")
+		fmt.Println("Artiste non trouvé")
+		http.Error(w, "Artiste non trouvé", http.StatusNotFound)
+		return
 	}
 
+	// Créez une structure de données pour les données à renvoyer à la page
+	data := struct {
+		Artist manager.Artist
+	}{
+		Artist: artist,
+	}
+	// Utilisez votre modèle de page pour afficher les données
 	inittemplate.Temp.ExecuteTemplate(w, "artist", data)
-
 }
