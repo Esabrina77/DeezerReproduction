@@ -1,0 +1,26 @@
+{{define "album"}}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="../assets/styles/album.css">
+  <title>Album-{{.Title}}</title>
+</head>
+
+<body>
+  <div class="main">
+    <img class="product__image" src="{{.CoverXl}}" alt="{{.Title}}">
+    <div class="container">
+      <div class="title">{{.Title}}
+        <span>{{.Artist.Name}}</span>
+      </div>
+      <p class="desc">Duration: {{.Duration}}. NbTracks: {{.NbTracks}}</p>
+      <p class="desc"><a href="{{.Link}}">Voir sur Deezer</a> copyWrite: {{.ReleaseDate}}</p>
+    </div>
+  </div>
+</body>
+
+</html>
+{{end}}

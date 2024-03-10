@@ -19,12 +19,13 @@
                 <h1>Library</h1>
                 <a href="/radio">radios</a>
                 <a href="/podcast">Podcasts</a>
-                <a href="/artist">artists</a>
+                <a href="/allArtists">artists</a>
                 <a href="/editorial">editorials</a>
                 <h1>Ma musique</h1>
                 <a href="/favoris">Mes Favoris</a>
             </div>
         </div>
+    <!-- .manga$*4 -->
 
         <div class="second">
             <div class="search">
@@ -36,12 +37,12 @@
             </div>
             <div class="TopALL">
                 <div class="Top">
-                    <div class="FamousSong">
+                    <div class="FamousSong" id="famousSong">
                         <div class="infosSong">
                             <p>Musique la plus écoutée </p>
                             <h1>Titre: {{.TopTrack.Title}}</h1>
                             <div class="Description">
-                                <h3>Description : {{.Description}}</h3>
+                                <h3>{{.Description}}</h3>
                             </div>
                             <h2>Artiste: {{.TopTrack.Artist.Name}}</h2>
                             <h4>Durée: {{.TopTrack.Duration}} sec</h4>
@@ -49,7 +50,8 @@
                             <h6>Explicit Lyrics: {{.TopTrack.ExplicitLyrics}}</h6>
                         </div>
                         <div class="imageSon">
-                            <img src="{{.TopTrack.Album.CoverMedium}}" alt="{{.TopTrack.Album.CoverMedium}}">
+                            <a href="/artist/{{.TopTrack.Artist.ID}}"> <img src="{{.TopTrack.Album.CoverMedium}}"
+                                    alt="{{.TopTrack.Artist.Name}}"></a>
                         </div>
                     </div>
 
@@ -63,7 +65,9 @@
                         {{range .TopArtists}}
                         <div class="ChartArtist">
                             <div class="ChartArtist-image">
-                                <a href="/artist/{{.ID}}"> <img src="{{.Picture}}" alt="{{.Name}}" /></a>
+                                <a href="/artist/{{.ID}}">
+                                    <img src="{{.PictureBig}}" alt="{{.Name}}" />
+                                </a>
                             </div>
                             <div class="name">
                                 <h2>{{.Name}}</h2>
@@ -127,6 +131,50 @@
             const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
             progressBar.value = percentage;
         });
+
+     // Récupération de l'élément contenant la chanson
+const famousSong = document.getElementById('famousSong');
+
+// Récupération de l'image
+const image = document.querySelector('.imageSon img');
+
+// Création d'une fonction pour extraire la couleur dominante de l'image
+function getDominantColor(image) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  context.drawImage(image, 0, 0);
+  const imageData = context.getImageData(0, 0, image.width, image.height).data;
+
+  const colorCounts = {};
+  let maxCount = 0;
+  let dominantColor = 'transparent';
+
+  for (let i = 0; i < imageData.length; i += 4) {
+    const r = imageData[i];
+    const g = imageData[i + 1];
+    const b = imageData[i + 2];
+    const rgb = `rgb(${r},${g},${b})`;
+
+    if (colorCounts[rgb]) {
+      colorCounts[rgb]++;
+    } else {
+      colorCounts[rgb] = 1;
+    }
+
+    if (colorCounts[rgb] > maxCount) {
+      maxCount = colorCounts[rgb];
+      dominantColor = rgb;
+    }
+  }
+
+  return dominantColor;
+}
+
+// Appel de la fonction pour obtenir la couleur dominante de l'image
+const dominantColor = getDominantColor(image);
+
+// Appliquer la couleur dominante comme couleur de fond
+famousSong.style.backgroundColor = dominantColor;
     </script>
 </body>
 

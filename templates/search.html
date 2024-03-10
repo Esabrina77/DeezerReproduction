@@ -4,10 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Résultats de recherche</title>
 </head>
 <body>
-    
+    <h1>Résultats de recherche</h1>
+    <!-- Afficher les résultats paginés ici -->
+<ul id="results-list">
+    <!-- Boucle sur les résultats paginés -->
+    {{range .Results}}
+    <li>{{.}}</li>
+    {{end}}
+</ul>
+    <!-- Afficher les liens de pagination ici -->
+    <div id="pagination-container">
+        <!-- Générer les liens de pagination -->
+        {{if .HasPreviousPage}}
+        <a href="/search?query={{.Query}}&page={{.PreviousPage}}">Précédent</a>
+        {{end}}
+        
+        {{range .Pages}}
+            {{if eq .CurrentPage .PageNumber}}
+                <strong>{{.PageNumber}}</strong>
+            {{else}}
+                <a href="/search?query={{$.Query}}&page={{.PageNumber}}">{{.PageNumber}}</a>
+            {{end}}
+        {{end}}
+        
+        {{if .HasNextPage}}
+        <a href="/search?query={{.Query}}&page={{.NextPage}}">Suivant</a>
+        {{end}}
+    </div>
 </body>
 </html>
 {{end}}

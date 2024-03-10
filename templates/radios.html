@@ -1,25 +1,35 @@
 {{define "radio"}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/assets/styles/radio.css">
     <title>Document</title>
 </head>
+
 <body>
-    
-    <h1>Radio</h1>
-    <ul>
-        <div class="allRadios">
-            {{ range . }}
-        <div id="Radio">
-            <li>{{ .Title }}</li>
-            <li>{{ .Tracklist }}</li>
-            <img src="{{ .Picture }}" alt="{{ .Picture }}" width="70px" height="70px">
-            {{ end }}
-    </ul>
-</div>
-</div>
+
+    <div class="AllProduct">
+        {{ range .}}
+        <div class="PRODUCT">
+
+            <div class="IMAGE">
+                <img src="{{ .Picture }}" alt="{{ .Title }}">
+            <div id="Like"> 
+                    <button class="like-button">
+                        <span class="like-icon">&#10084;</span>
+                      </button>
+              </div>
+            </div>
+            <div id="TEXT">
+                <p><b>{{.Title}} </b></p>          
+            </div>
+        </div>
+        {{end}}
+    </div>
 </body>
+
 </html>
 {{end}}

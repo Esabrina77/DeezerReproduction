@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"groupieTrack/manager"
 	inittemplate "groupieTrack/templates"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -144,6 +146,21 @@ func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// tous les artistes
+func AllArtistsHandler(w http.ResponseWriter, r *http.Request) {
+	response, err := http.Get(deezerAPI + "/artist")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+	var artistResp manager.ArtistResponse
+	if err := json.NewDecoder(response.Body).Decode(&artistResp); err != nil {
+		log.Fatal(err)
+
+	}
+	inittemplate.Temp.ExecuteTemplate(w, "allArtists", artistResp.Data)
+}
+
 // RADIO DEEZER
 func RadiosHandler(w http.ResponseWriter, r *http.Request) {
 	response, err := http.Get(deezerAPI + "/radio")
@@ -173,9 +190,6 @@ func EditorialsHandler(w http.ResponseWriter, r *http.Request) {
 }
 func GenreHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "genre", nil)
-}
-func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	inittemplate.Temp.ExecuteTemplate(w, "search", nil)
 }
 
 // page d'acceuil
@@ -225,6 +239,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// PAGE CORREPONDANT A CHAQUE ARTISTE EN FONCTION DE L4ID
 func extractArtistID(urlPath string) int {
 	parts := strings.Split(urlPath, "/")
 	if len(parts) < 3 {
@@ -236,6 +251,31 @@ func extractArtistID(urlPath string) int {
 	}
 	return artistID
 }
+func getArtistAlbums(artistID int) ([]manager.Album, error) {
+	//REQUETE A L API POUR OBTENIR LES ALBUMS DE L'ARTISTE PAR SON ID
+	albumURL := fmt.Sprintf("https://api.deezer.com/artist/%d/albums", artistID)
+
+	response, err := http.Get(albumURL)
+	if err != nil {
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	//ANALYSE ET DECRYTAGE DE LA REPONSE JSON
+	var albumResponse manager.AlbumResponse
+	err = json.Unmarshal(body, &albumResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	//RENVOYER LA LISTE DES ALBUMS DE L'ARTISTE
+	return albumResponse.Data, nil
+}
+
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	artistID := extractArtistID(r.URL.Path)
 	if artistID == -1 {
@@ -275,13 +315,168 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Artiste non trouvé", http.StatusNotFound)
 		return
 	}
-
+	// Analysez la réponse JSON dans la structure `Album`
+	albums, err := getArtistAlbums(artistID)
+	if err != nil {
+		fmt.Println("Erreur lors de la récupération des albums :", err)
+		http.Error(w, "Erreur lors de la récupération des albums :", http.StatusInternalServerError)
+		return
+	}
 	// Créez une structure de données pour les données à renvoyer à la page
 	data := struct {
 		Artist manager.Artist
+		Albums []manager.Album
 	}{
 		Artist: artist,
+		Albums: albums,
 	}
 	// Utilisez votre modèle de page pour afficher les données
 	inittemplate.Temp.ExecuteTemplate(w, "artist", data)
+}
+
+func extractAlbumID(urlPath string) int {
+	parts := strings.Split(urlPath, "/")
+	if len(parts) < 3 {
+		return -1
+	}
+	albumID, err := strconv.Atoi(parts[2])
+	if err != nil {
+		return -1
+	}
+	return albumID
+}
+func AlbumHandler(w http.ResponseWriter, r *http.Request) {
+	albumID := extractAlbumID(r.URL.Path)
+	log.Println(albumID)
+	if albumID == -1 {
+		http.Error(w, "ID d'album invalide", http.StatusBadRequest)
+		return
+	}
+
+	// Faites une requête HTTP pour récupérer les détails de l'album à partir de l'API Deezer
+	response, err := http.Get("https://api.deezer.com/album/" + strconv.Itoa(albumID))
+	if err != nil {
+		log.Println("Erreur lors de la requête :", err)
+		http.Error(w, "Erreur lors de la requête", http.StatusInternalServerError)
+		return
+	}
+	defer response.Body.Close()
+
+	// Vérifiez le code de statut de la réponse
+	if response.StatusCode != http.StatusOK {
+		log.Println("Aucun album trouvé")
+		http.Error(w, "Album introuvable", http.StatusNotFound)
+		return
+	}
+
+	// Analysez la réponse JSON dans la structure `Album`
+	var album manager.Album
+	err = json.NewDecoder(response.Body).Decode(&album)
+	if err != nil {
+		log.Println("Erreur lors de l'analyse de la réponse JSON :", err)
+		http.Error(w, "Erreur lors de l'analyse de la réponse JSON", http.StatusInternalServerError)
+		return
+	}
+
+	// Utilisez votre modèle de page pour afficher les données
+	inittemplate.Temp.ExecuteTemplate(w, "album", album)
+}
+
+// FONCTION  DE RECHERCHE
+func SearchHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("query")
+	page := getPageQueryParam(r)
+	itemsPerPage := 10
+
+	// Effectuer la recherche à l'aide de l'API Deezer
+	results, _, err := performSearch(query)
+	if err != nil {
+		http.Error(w, "Erreur de recherche", http.StatusInternalServerError)
+		return
+	}
+
+	// Paginer les résultats
+	paginatedResults := paginateResults(results, page, itemsPerPage)
+
+	// Construire la requête de redirection avec les résultats de recherche
+	redirectURL := fmt.Sprintf("/search?query=%s&page=%d&results=%s", query, page, strings.Join(paginatedResults, ","))
+
+	// Rediriger l'utilisateur vers la page de recherche avec les résultats
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+}
+
+func getPageQueryParam(r *http.Request) int {
+	pageParam := r.URL.Query().Get("page")
+	if pageParam != "" {
+		page, err := strconv.Atoi(pageParam)
+		if err == nil {
+			return page
+		}
+	}
+	return 1 // Page par défaut si le paramètre est manquant ou invalide
+}
+
+func performSearch(query string) ([]string, int, error) {
+	url := "https://api.deezer.com/search?q=" + url.QueryEscape(query)
+	response, err := http.Get(url)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer response.Body.Close()
+	// Vérification du code de statut de la réponse
+	if response.StatusCode != http.StatusOK {
+		return nil, 0, fmt.Errorf("la requete a l'api de deezer avec le code de statut : %d", response.StatusCode)
+	}
+	// Lecture de la réponse JSON
+	var deezerResponse struct {
+		Data []struct {
+			Title string `json:"title"`
+		} `json:"data"`
+		Total int `json:"total"`
+	}
+
+	err = json.NewDecoder(response.Body).Decode(&deezerResponse)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Extraction des résultats de recherche et du nombre total de résultats
+	results := make([]string, 0, len(deezerResponse.Data))
+	for _, item := range deezerResponse.Data {
+		results = append(results, item.Title)
+	}
+
+	totalResults := deezerResponse.Total
+
+	return results, totalResults, nil
+}
+
+func paginateResults(results []string, page, itemsPerPage int) []string {
+	startIndex := (page - 1) * itemsPerPage
+	endIndex := startIndex + itemsPerPage
+
+	// Vérifier les limites de pagination
+	if startIndex >= len(results) {
+		return []string{} // Aucun résultat pour cette page
+	}
+
+	if endIndex > len(results) {
+		endIndex = len(results)
+	}
+
+	return results[startIndex:endIndex]
+}
+
+func getTotalPages(totalResults, itemsPerPage int) int {
+	totalPages := totalResults / itemsPerPage
+	if totalResults%itemsPerPage != 0 {
+		totalPages++
+	}
+	return totalPages
+}
+
+type SearchResponse struct {
+	Results     []string `json:"results"`
+	TotalPages  int      `json:"total_pages"`
+	CurrentPage int      `json:"current_page"`
 }

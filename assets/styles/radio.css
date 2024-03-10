@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* LES COULEURS APPORTEES AU DIV SONT 
+JUSTE POUR POUVOIR LES DIFFERENCIER FACILEMENT */
+
+body{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  position: relative;
+  display: flex;
+   flex-direction: column;
+}
+
+/* AFFICHAGE DE L ENSEMBLE DES LIEUX ET LEURS DESCRIPTIONS */
+.AllProduct{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .PRODUCT{
+   width: auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  }
+  .PRODUCT img:last-child{
+    margin-right: 0;
+  }
+  
+  
+  /* /LES IMAGES DE CHAQUE LIEUX  */
+  .IMAGE{
+    position: relative;
+  }
+  .IMAGE img{
+    width: 350px;
+    height: 255px;
+    border-radius: 20px;
+  }
+  
+  /* POSITION DU COEUR (LIKE) */
+  #Like{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .like-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .like-icon {
+    font-size: 1.2rem;
+    color: white;
+    margin-right: 5px;
+    transition: color 0.3s ease;
+  }
+  
+  .like-text {
+    font-size: 1rem;
+    color: black;
+  }
+  
+  .like-button.clicked .like-icon {
+    color: red;
+  }
+
+  /* ELMENTS DESCRIPTIFS */
+  #TEXT{
+    padding: 0 5px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  #TEXT p{
+    margin-bottom: 10px;
+  }

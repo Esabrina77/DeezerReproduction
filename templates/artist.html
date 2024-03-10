@@ -13,6 +13,14 @@
     <p>Nombre d'albums: {{.Artist.NbAlbum}}</p>
     <p>Nombre de fans: {{.Artist.NbFan}}</p>
 </div>
+<div class="Album-artist">
+  {{range .Albums}}
+  <div class="album">
+    <a href="/album/{{.ID}}"><img src="{{.CoverXl}}" alt="{{.Title}}" ></a>
+  <h2>{{.Title}}</h2>
+ </div>
+  {{end}}
+</div>
 </body>
 </html>
 {{end}}

@@ -168,6 +168,10 @@ type Tracks struct {
 	Type                  string  `json:"type"`
 }
 
+type AlbumResponse struct {
+	Data []Album `json:"data"`
+}
+
 // STRUCTURE DES ALBUMS
 type Album struct {
 	ID                    int    `json:"id"`
