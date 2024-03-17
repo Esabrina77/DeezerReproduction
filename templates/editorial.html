@@ -1,24 +1,98 @@
 {{define "editorial"}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/styles/editorial.css">
     <title>editorial</title>
 </head>
+
 <body>
-    
-    <h1>EDITORIALS</h1>
-    <ul>
-        <div class="allEdits">
-            {{ range . }}
-        <div id="editorial">
-            <li>{{ .Name }}</li>
-            <img src="{{ .PictureBig }}" alt="{{ .PictureBig }}" width="100px" height="100px">
-            {{ end }}
-    </ul>
-</div>
-</div>
+    <div class="all">
+        <div class="first">
+            <div class="Kaporal">
+                <a href="/home"><img src="/assets/icons/LOGO.png"></a>
+            </div>
+            <div class="library">
+                <h1>Library</h1>
+                <a href="/radio">radios</a>
+                <a href="/podcast">Podcasts</a>
+                <a href="/allArtists">artists</a>
+                <a href="/editorial">editorials</a>
+                <h1>Ma musique</h1>
+                <a href="/favoris">Mes Favoris</a>
+            </div>
+        </div>
+        <!-- .manga$*4 -->
+
+        <div class="second">
+            <div class="search">
+                <div class="recherche">
+                    <form action="/search" method="GET" class="search-container">
+                        <input type="text" name="query" placeholder="Search..." class="search-input" required>
+                        <input type="radio" name="search_type" value="artist" id="radio-artist" required>
+                        <label for="radio-artist">Artiste</label>
+                        <input type="radio" name="search_type" value="album" id="radio-album" required>
+                        <label for="radio-album">Album</label>
+                        <input type="radio" name="search_type" value="track" id="radio-track" required>
+                        <label for="radio-track">Piste</label>
+                        <button type="submit" class="search-btn"><img class="fas fa-search"
+                                src="/assets/icons/chercher.png"></button>
+                    </form>
+                </div>
+                <div class="lightMode">
+                    <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
+                    <label for="dark-light"></label>
+                    <div class="light-back"></div>
+                </div>
+            </div>
+
+            <div class="TopALL">
+                <div class="wrapper">
+                    {{ range . }}
+                    <div class="card">
+                        <img src="{{ .PictureBig }}" alt="{{ .PictureBig }}">
+                        <div class="info">
+                          <h1>{{ .Name }}</h1>
+                          <p>{{.Type}}</p>
+                          <a href="https://www.deezer.com/fr/editorial/{{.ID}}">
+                            <button class="buttoncard">Voir plus</button>
+                          </a>
+                          <button class="like-button" data-card-id="{{.ID}}"></button>
+                        </div>
+                      </div>
+                    {{ end }}
+                </div>
+            </div>
+            <script>
+document.addEventListener('DOMContentLoaded', function () {
+  var likeButtons = document.querySelectorAll('.like-button');
+
+  likeButtons.forEach(function (likeButton) {
+    var cardId = likeButton.dataset.cardId; // Récupérer l'ID de l'élément
+
+    likeButton.addEventListener('click', function () {
+      if (likeButton.classList.contains('liked')) {
+        likeButton.classList.remove('liked');
+        localStorage.removeItem(cardId);
+      } else {
+        likeButton.classList.add('liked');
+        localStorage.setItem(cardId, 'true');
+      }
+    });
+
+    // Vérifier si le bouton de like est déjà activé
+    if (localStorage.getItem(cardId)) {
+      likeButton.classList.add('liked');
+    }
+  });
+});
+            </script>
 </body>
+
 </html>
 {{end}}
+  

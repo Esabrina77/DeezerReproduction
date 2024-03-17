@@ -21,7 +21,7 @@ func InitServe() {
 	http.HandleFunc("/radio", controller.RadiosHandler)
 	http.HandleFunc("/editorial", controller.EditorialsHandler)
 	http.HandleFunc("/album/", controller.AlbumHandler)
-
+	http.HandleFunc("/filtered-radios", controller.FilteredRadiosHandler)
 	http.HandleFunc("/connexion", controller.ConnexionHandler)
 	http.HandleFunc("/inscription", controller.InscriptionHandler)
 	http.HandleFunc("/treatmentI", controller.TreatInscriptionHandler)

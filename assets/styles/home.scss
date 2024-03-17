@@ -17,6 +17,7 @@ body {
     background-repeat: no-repeat;
     background-clip: border-box;
     overflow: hidden;
+    scrollbar-width: none;
 }
 
 .all {
@@ -119,32 +120,59 @@ body {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.418);
     border-radius: 50px;
 }
-
-.search img {
-    border-radius: 50%;
-    width: 30px;
+.search-container {
+    background: #fff;
     height: 30px;
-}
-
-form {
+    border-radius: 30px;
+    padding: 10px 20px;
     display: flex;
+    justify-content: center;
     align-items: center;
+    cursor: pointer;
+    transition: 0.8s;
+
+    box-shadow:
+        4px 4px 6px 0 rgba(255, 255, 255, 0.3),
+        -4px -4px 6px 0 rgba(116, 125, 136, 0.2),
+        inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2),
+        inset 4px 4px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
-input[type="text"] {
-    border-radius: 10px;
+.search-container:hover > .search-input {
+    width: 400px;
+}
+
+.search-container .search-input {
+    background: transparent;
     border: none;
+    outline: none;
+    width: 0px;
+    font-weight: 500;
+    font-size: 16px;
+    transition: 0.8s;
+}
+.search-container .search-btn .fas {
+    color: #5cbdbb;
 }
 
-button[type="submit"] {
-    font-family: Georgia, "Times New Roman", Times, serif;
-    padding: 5px;
-    border: none;
-    border-radius: 50%;
-    padding: 2px;
-    background-color: transparent;
+@keyframes hoverShake {
+    0% {
+        transform: skew(0deg, 0deg);
+    }
+    25% {
+        transform: skew(5deg, 5deg);
+    }
+    75% {
+        transform: skew(-5deg, -5deg);
+    }
+    100% {
+        transform: skew(0deg, 0deg);
+    }
 }
 
+.search-container:hover {
+    animation: hoverShake 0.15s linear 3;
+}
 /*musique populaire*/
 .FamousSong {
     display: flex;

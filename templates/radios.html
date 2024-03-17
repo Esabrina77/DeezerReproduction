@@ -5,30 +5,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/assets/styles/radio.css">
-    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/editorial.css">
+    <title>Toutes Vos Radios</title>
 </head>
 
 <body>
-
-    <div class="AllProduct">
-        {{ range .}}
-        <div class="PRODUCT">
-
-            <div class="IMAGE">
-                <img src="{{ .Picture }}" alt="{{ .Title }}">
-            <div id="Like"> 
-                    <button class="like-button">
-                        <span class="like-icon">&#10084;</span>
-                      </button>
+    <div class="all">
+        <div class="first">
+            <div class="Kaporal">
+                <a href="/home"><img src="/assets/icons/LOGO.png"></a> 
               </div>
-            </div>
-            <div id="TEXT">
-                <p><b>{{.Title}} </b></p>          
+            <div class="library">
+                <h1>Library</h1>
+                <a href="/radio">radios</a>
+                <a href="/podcast">Podcasts</a>
+                <a href="/allArtists">artists</a>
+                <a href="/editorial">editorials</a>
+                <h1>Ma musique</h1>
+                <a href="/favoris">Mes Favoris</a>
             </div>
         </div>
-        {{end}}
-    </div>
+        <!-- .manga$*4 -->
+
+        <div class="second">
+            <div class="search">
+                <div class="recherche">
+                    <form action="/search" method="GET" class="search-container">
+                        <input type="text" name="query" placeholder="Search..." class="search-input" required>
+                        <input type="radio" name="search_type" value="artist" id="radio-artist" required>
+                        <label for="radio-artist">Artiste</label>
+                        <input type="radio" name="search_type" value="album" id="radio-album" required>
+                        <label for="radio-album">Album</label>
+                        <input type="radio" name="search_type" value="track" id="radio-track" required>
+                        <label for="radio-track">Piste</label>
+                        <button type="submit" class="search-btn"><img class="fas fa-search"
+                                src="/assets/icons/chercher.png"></button>
+                    </form>
+                </div>
+                <div class="lightMode">
+                    <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
+                    <label for="dark-light"></label>
+                    <div class="light-back"></div>
+                </div>
+            </div>
+
+            <div class="TopALL">
+                <div class="wrapper">
+                    {{ range . }}
+                    <div class="card">
+                        <img src="{{ .PictureBig }}" alt="{{ .Title }}">
+                        <div class="info">
+                            <h1>{{.Title}}</h1>
+                            <p>{{.Type}}</p>
+                            <p>{{.ID}}</p>
+                            <a href="https://www.deezer.com/fr/radio/{{.ID}}"><button> Voir plus</button></a>
+                            <button class="like-button"></button>
+                        </div>
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+
 </body>
 
 </html>

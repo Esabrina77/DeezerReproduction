@@ -10,17 +10,57 @@
 </head>
 
 <body>
-  <div class="main">
-    <img class="product__image" src="{{.CoverXl}}" alt="{{.Title}}">
-    <div class="container">
-      <div class="title">{{.Title}}
-        <span>{{.Artist.Name}}</span>
-      </div>
-      <p class="desc">Duration: {{.Duration}}. NbTracks: {{.NbTracks}}</p>
-      <p class="desc"><a href="{{.Link}}">Voir sur Deezer</a> copyWrite: {{.ReleaseDate}}</p>
-    </div>
-  </div>
-</body>
+    <div class="all">
+        <div class="first">
+            <div class="Kaporal">
+              <a href="/home"><img src="/assets/icons/LOGO.png"></a> 
+            </div>
+            <div class="library">
+                <h1>Library</h1>
+                <a href="/radio">radios</a>
+                <a href="/editorial">editorials</a>
+                <h1>Ma musique</h1>
+                <a href="/favoris">Mes Favoris</a>
+            </div>
+        </div>
+    <!-- .manga$*4 -->
 
+        <div class="second">
+          <div class="search">
+            <div class="recherche">
+              <form action="/search" method="GET" class="search-container">
+                <input type="text" name="query" placeholder="Search..." class="search-input" required>
+                <input type="radio" name="search_type" value="artist" id="radio-artist" required>
+                <label for="radio-artist">Artiste</label>
+                <input type="radio" name="search_type" value="album" id="radio-album" required>
+                <label for="radio-album">Album</label>
+                <input type="radio" name="search_type" value="track" id="radio-track" required>
+                <label for="radio-track">Piste</label>
+                <button type="submit" class="search-btn"><img class="fas fa-search"
+                        src="/assets/icons/chercher.png"></button>
+            </form>
+          </div>
+                <div class="lightMode">
+                    <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
+                    <label for="dark-light"></label>
+                    <div class="light-back"></div>
+                </div>
+            </div>
+            <div class="TopALL">
+              <div class="main">
+                <img class="product__image" src="{{.CoverXl}}" alt="{{.Title}}">
+                <div class="container">
+                  <div class="title">{{.Title}}
+                    <span>{{.Artist.Name}}</span>
+                    <span>{{.Tracklist}}</span>
+                  </div>
+                  <p class="desc">Duration: {{.Duration}}. NbTracks: {{.NbTracks}}</p>
+                  <p class="desc"><a href="{{.Link}}">Voir sur Deezer</a> copyWrite: {{.ReleaseDate}}</p>
+                </div>
+              </div>
+
+    </div>
+
+</body>
 </html>
 {{end}}

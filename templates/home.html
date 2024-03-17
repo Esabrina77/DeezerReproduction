@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../assets/styles/home.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <title>Welcome Guys</title>
 </head>
 
@@ -13,8 +14,8 @@
     <div class="all">
         <div class="first">
             <div class="Kaporal">
-                <img src="/assets/icons/LOGO.png">
-            </div>
+                <a href="/home"><img src="/assets/icons/LOGO.png"></a> 
+              </div>
             <div class="library">
                 <h1>Library</h1>
                 <a href="/radio">radios</a>
@@ -25,19 +26,33 @@
                 <a href="/favoris">Mes Favoris</a>
             </div>
         </div>
-    <!-- .manga$*4 -->
+        <!-- .manga$*4 -->
 
         <div class="second">
             <div class="search">
-                <p>barre de recherche</p>
-                <form action="/search" method="GET">
-                    <input type="text" name="query" placeholder="recherche..." />
-                    <button type="submit"><img src="/assets/icons/loupe.png" alt="loupe"></button>
-                </form>
+                <div class="recherche">
+                    <form action="/search" method="GET" class="search-container">
+                        <input type="text" name="query" placeholder="Search..." class="search-input" required>
+                        <input type="radio" name="search_type" value="artist" id="radio-artist" required>
+                        <label for="radio-artist">Artiste</label>
+                        <input type="radio" name="search_type" value="album" id="radio-album" required>
+                        <label for="radio-album">Album</label>
+                        <input type="radio" name="search_type" value="track" id="radio-track" required>
+                        <label for="radio-track">Piste</label>
+                        <button type="submit" class="search-btn"><img class="fas fa-search" src="/assets/icons/chercher.png"></button>
+                    </form>
+                    
+                </div>
+                <div class="lightMode">
+                    <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
+                    <label for="dark-light"></label>
+                    <div class="light-back"></div>
+                </div>
             </div>
+
             <div class="TopALL">
                 <div class="Top">
-                    <div class="FamousSong" id="famousSong">
+                    <div class="FamousSong" id="famousSong" >
                         <div class="infosSong">
                             <p>Musique la plus écoutée </p>
                             <h1>Titre: {{.TopTrack.Title}}</h1>
@@ -131,50 +146,6 @@
             const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
             progressBar.value = percentage;
         });
-
-     // Récupération de l'élément contenant la chanson
-const famousSong = document.getElementById('famousSong');
-
-// Récupération de l'image
-const image = document.querySelector('.imageSon img');
-
-// Création d'une fonction pour extraire la couleur dominante de l'image
-function getDominantColor(image) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  context.drawImage(image, 0, 0);
-  const imageData = context.getImageData(0, 0, image.width, image.height).data;
-
-  const colorCounts = {};
-  let maxCount = 0;
-  let dominantColor = 'transparent';
-
-  for (let i = 0; i < imageData.length; i += 4) {
-    const r = imageData[i];
-    const g = imageData[i + 1];
-    const b = imageData[i + 2];
-    const rgb = `rgb(${r},${g},${b})`;
-
-    if (colorCounts[rgb]) {
-      colorCounts[rgb]++;
-    } else {
-      colorCounts[rgb] = 1;
-    }
-
-    if (colorCounts[rgb] > maxCount) {
-      maxCount = colorCounts[rgb];
-      dominantColor = rgb;
-    }
-  }
-
-  return dominantColor;
-}
-
-// Appel de la fonction pour obtenir la couleur dominante de l'image
-const dominantColor = getDominantColor(image);
-
-// Appliquer la couleur dominante comme couleur de fond
-famousSong.style.backgroundColor = dominantColor;
     </script>
 </body>
 

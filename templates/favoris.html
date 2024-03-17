@@ -1,12 +1,55 @@
+{{define "favoris"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" type="text/css" href="/assets/styles/favoris.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="../assets/styles/album.css">
+  <title>Album-{{.Title}}</title>
 </head>
+
 <body>
-    
+    <div class="all">
+        <div class="first">
+            <div class="Kaporal">
+                <img src="/assets/icons/LOGO.png">
+            </div>
+            <div class="library">
+                <h1>Library</h1>
+                <a href="/radio">radios</a>
+                <a href="/podcast">Podcasts</a>
+                <a href="/allArtists">artists</a>
+                <a href="/editorial">editorials</a>
+                <h1>Ma musique</h1>
+                <a href="/favoris">Mes Favoris</a>
+            </div>
+        </div>
+    <!-- .manga$*4 -->
+
+        <div class="second">
+          <div class="search">
+            <form action="/search" method="GET" class="search-container">
+                    <input type="text" name="query" placeholder="Search..." class="search-input">
+         <button type="submit"  class="search-btn"><img class="fas fa-search" src="/assets/icons/chercher.png"></button>
+            </form>
+        </div>
+
+
+            <div class="TopALL">
+              <div class="main">
+                <img class="product__image" src="{{.CoverXl}}" alt="{{.Title}}">
+                <div class="container">
+                  <div class="title">{{.Title}}
+                    <span>{{.Artist.Name}}</span>
+                  </div>
+                  <p class="desc">Duration: {{.Duration}}. NbTracks: {{.NbTracks}}</p>
+                  <p class="desc"><a href="{{.Link}}">Voir sur Deezer</a> copyWrite: {{.ReleaseDate}}</p>
+                </div>
+              </div>
+
+    </div>
+
 </body>
 </html>
+{{end}}

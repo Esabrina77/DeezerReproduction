@@ -157,7 +157,7 @@ input[type="email"] {
 
 input[type="submit"] {
     margin: 3vh;
-    border-radius: 25% 50%;
+    border-radius: 50px;
     color: rgb(9, 106, 113);
     background-color: rgba(0, 0, 0, 0.776);
     font-size: calc(0.4em + 0.6vw);
@@ -323,7 +323,7 @@ a>img {
 
 }
 
-@media only screen and (max-width: 505px) {
+@media only screen and (max-width: 768px) {
     body {
         background-image: url('/assets/images/399shots_so.png');
         background-position: center;
@@ -464,7 +464,7 @@ a>img {
     .nav-sub {
         position: absolute;
         top: 5vh;
-        right: 0px;
+        right: -1vw;
         flex-direction: column;
         background-color: rgb(0, 0, 0, 0.75);
         border-radius: 0px 0px 0px 20px;

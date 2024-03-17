@@ -7,11 +7,12 @@ import (
 	"groupieTrack/manager"
 	inittemplate "groupieTrack/templates"
 	"io"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
-	"net/url"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -172,7 +173,40 @@ func RadiosHandler(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(response.Body).Decode(&radioResp); err != nil {
 		log.Fatal(err)
 	}
+
+	// Trier les radios par ordre alphabétique
+	sort.Slice(radioResp.Data, func(i, j int) bool {
+		return strings.ToLower(radioResp.Data[i].Title) < strings.ToLower(radioResp.Data[j].Title)
+	})
 	inittemplate.Temp.ExecuteTemplate(w, "radio", radioResp.Data)
+}
+func FilteredRadiosHandler(w http.ResponseWriter, r *http.Request) {
+	letter := r.FormValue("letter")
+
+	response, err := http.Get(deezerAPI + "/radio")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+	var radioResp manager.RadioResponse
+	if err := json.NewDecoder(response.Body).Decode(&radioResp); err != nil {
+		log.Fatal(err)
+	}
+
+	// Filtrer les radios en fonction de la lettre sélectionnée
+	filteredRadios := make([]manager.Radio, 0)
+	for _, radio := range radioResp.Data {
+		if strings.HasPrefix(strings.ToLower(radio.Title), strings.ToLower(letter)) {
+			filteredRadios = append(filteredRadios, radio)
+		}
+	}
+
+	// Trier les radios par ordre alphabétique
+	sort.Slice(filteredRadios, func(i, j int) bool {
+		return strings.ToLower(filteredRadios[i].Title) < strings.ToLower(filteredRadios[j].Title)
+	})
+
+	inittemplate.Temp.ExecuteTemplate(w, "filtered-radios", filteredRadios)
 }
 
 // EDITORIAL DEEZER
@@ -210,10 +244,10 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	topTrack := charts.Tracks.Data[0]
 	//Récuperer les 10 artistes les plus écouter en france
 	topArtists := charts.Artist.Data[:10]
-	for _, artist := range topArtists {
-		fmt.Println("Nom de l'artiste:", artist.Name)
-		fmt.Println("Photo de l'artiste:", artist.PictureMedium)
-	}
+	// for _, artist := range topArtists {
+	// 	fmt.Println("Nom de l'artiste:", artist.Name)
+	// 	fmt.Println("Photo de l'artiste:", artist.PictureMedium)
+	// }
 	//Lecture du fichier Description.txt
 	descript, err := os.ReadFile("Description.txt")
 	if err != nil {
@@ -378,105 +412,51 @@ func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Utilisez votre modèle de page pour afficher les données
+	// Utilisez LE modèle de page pour afficher les données
 	inittemplate.Temp.ExecuteTemplate(w, "album", album)
 }
 
-// FONCTION  DE RECHERCHE
-func SearchHandler(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query().Get("query")
-	page := getPageQueryParam(r)
-	itemsPerPage := 10
-
-	// Effectuer la recherche à l'aide de l'API Deezer
-	results, _, err := performSearch(query)
-	if err != nil {
-		http.Error(w, "Erreur de recherche", http.StatusInternalServerError)
-		return
-	}
-
-	// Paginer les résultats
-	paginatedResults := paginateResults(results, page, itemsPerPage)
-
-	// Construire la requête de redirection avec les résultats de recherche
-	redirectURL := fmt.Sprintf("/search?query=%s&page=%d&results=%s", query, page, strings.Join(paginatedResults, ","))
-
-	// Rediriger l'utilisateur vers la page de recherche avec les résultats
-	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
-}
-
-func getPageQueryParam(r *http.Request) int {
-	pageParam := r.URL.Query().Get("page")
-	if pageParam != "" {
-		page, err := strconv.Atoi(pageParam)
-		if err == nil {
-			return page
-		}
-	}
-	return 1 // Page par défaut si le paramètre est manquant ou invalide
-}
-
-func performSearch(query string) ([]string, int, error) {
-	url := "https://api.deezer.com/search?q=" + url.QueryEscape(query)
+// fonctionnalité d e recherche
+func search(query string, searchType string) (manager.SearchResult, error) {
+	formattedQuery := strings.ReplaceAll(query, " ", "+")
+	url := fmt.Sprintf("https://api.deezer.com/search?q=%s:\"%s\"", searchType, formattedQuery)
 	response, err := http.Get(url)
 	if err != nil {
-		return nil, 0, err
+		return manager.SearchResult{}, err
 	}
 	defer response.Body.Close()
-	// Vérification du code de statut de la réponse
-	if response.StatusCode != http.StatusOK {
-		return nil, 0, fmt.Errorf("la requete a l'api de deezer avec le code de statut : %d", response.StatusCode)
-	}
-	// Lecture de la réponse JSON
-	var deezerResponse struct {
-		Data []struct {
-			Title string `json:"title"`
-		} `json:"data"`
-		Total int `json:"total"`
-	}
 
-	err = json.NewDecoder(response.Body).Decode(&deezerResponse)
+	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, 0, err
+		return manager.SearchResult{}, err
 	}
 
-	// Extraction des résultats de recherche et du nombre total de résultats
-	results := make([]string, 0, len(deezerResponse.Data))
-	for _, item := range deezerResponse.Data {
-		results = append(results, item.Title)
+	var result manager.SearchResult
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return manager.SearchResult{}, err
 	}
 
-	totalResults := deezerResponse.Total
-
-	return results, totalResults, nil
+	return result, nil
 }
 
-func paginateResults(results []string, page, itemsPerPage int) []string {
-	startIndex := (page - 1) * itemsPerPage
-	endIndex := startIndex + itemsPerPage
-
-	// Vérifier les limites de pagination
-	if startIndex >= len(results) {
-		return []string{} // Aucun résultat pour cette page
+func SearchHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.FormValue("query")
+	searchType := r.FormValue("search_type")
+	// Création de la structure SearchResult
+	result := manager.SearchResult{
+		Query:      query,
+		SearchType: searchType,
 	}
 
-	if endIndex > len(results) {
-		endIndex = len(results)
+	// Effectuer la recherche et récupérer les résultats
+	searchResult, err := search(query, searchType)
+	if err != nil {
+		http.Error(w, "Erreur lors de la recherche", http.StatusInternalServerError)
+		return
 	}
-
-	return results[startIndex:endIndex]
-}
-
-func getTotalPages(totalResults, itemsPerPage int) int {
-	totalPages := totalResults / itemsPerPage
-	if totalResults%itemsPerPage != 0 {
-		totalPages++
-	}
-	return totalPages
-}
-
-type SearchResponse struct {
-	Results     []string `json:"results"`
-	TotalPages  int      `json:"total_pages"`
-	CurrentPage int      `json:"current_page"`
+	// Ajouter les résultats à la structure SearchResult
+	result.Data = searchResult.Data
+	log.Print(result)
+	inittemplate.Temp.ExecuteTemplate(w, "search", result)
 }

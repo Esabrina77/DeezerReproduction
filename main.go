@@ -2,16 +2,13 @@ package main
 
 import (
 	"fmt"
-	"groupieTrack/controller"
 	"groupieTrack/manager"
 	"groupieTrack/roots"
 	initTemplate "groupieTrack/templates"
-
-	"github.com/stripe/stripe-go"
 )
 
 func main() {
-	stripe.Key = controller.StripeSecretKey
+
 	manager.PrintColorResult("purple", "server is running...")
 	fmt.Println("")
 	manager.PrintColorResult("yellow", "CLICK HERE to OPEN  PAGE--->")

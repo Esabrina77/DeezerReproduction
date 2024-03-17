@@ -1,225 +1,249 @@
-/* author: https://codepen.io/Prakash286/pen/XWPaLLG
-Prakash */
-@import url('https://fonts.googleapis.com/css?family=Knewave|Raleway:500');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background-image: url("/assets/images/wallpaper.jpg");
-    background-size: cover;
-    background-position: center;
-    background-position-y: 100%;
-    background-repeat: no-repeat;
-    background-clip: border-box;
-  }
-  
-
-  .all {
-    background-color: rgba(20, 20, 20, 0.516);
-    display: flex;
-    gap: 10px;
-    height: 97vh;
-    width: 91%;
-    margin: 5vh;
-    border-radius: 25px;
-  }
-  
-  .first {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    max-width: -moz-fit-content;
-    max-width: fit-content;
-    padding: 2vw;
-  }
-  
-  .library {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    height: 60%;
-    color: white;
-    gap: 3vh;
-  }
-  
-  .library h1 {
-    font-style: oblique;
-  }
-  
-  .library a {
-    padding: 2px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    text-decoration: none;
-    color: rgb(255, 255, 179);
-  }
-  
-  .library a:hover {
-    font-size: medium;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 168, 0.132);
-  }
-  
-  .Kaporal a img {
-    width: 15vw;
-  }
-  
-  /*seconde partie*/
-  .second {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.578);
-    width: 80%;
-    max-height: 100%;
-    border-radius: 25px;
-    justify-content: space-between;
-  }
-  
-  /*seconde partie Top all*/
-  .TopALL {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    max-width: 100%;
-    height: 93vh;
-    position: relative;
-  }
-
-/* AFFICHE DE L ALBUM   unique */
-.main {
-    width: 50%;
-    height: 300px;
-    display: flex;
-    justify-content: center;
-    box-sizing: border-box;
-    padding: 3em;
-    position: absolute;
-    top: 53%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
 }
 
-.main::before,
-.main::after {
-    content: "";
-    width: 0;
-    height: 0;
-    box-sizing: inherit;
-    margin-top: 30px;
-    margin-bottom: -30px;
-    border: 3px solid transparent;
-    position: absolute;
-   
-}
-
-.main::before {
-    top: 0;
-    left: 0;
-}
-
-.main::after {
-    bottom: 0;
-    right: 0;
-    z-index: 999;
-}
-
-.main:hover::before {
-    width: 100%;
-    height: 100%;
-}
-
-.main:hover::before {
-    border-top-color: #F25978;
-    border-right-color: #d12749;
-    transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
-}
-
-
-.product__image {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 50%;
-    left: 25%;
-    transform: translate(-50%, -50%);
-    z-index: 99;
-}
-
-img {
-    margin-top: 50px;
-    width: 300px;
-    height: 350px;
-    filter: grayscale(100%);
-}
-img:hover{
-    filter: grayscale(0%);
-}
-.container {
-    width: 120%;
-    height: 200px;
-    margin-top: 20px;
-}
-
-.title {
-    font-family: 'Knewave', cursive;
-    font-size: calc(2vh+1rem);
-    color: #F25978;
-    margin-bottom: 50px;
-    position: relative;
-    top: 0;
-    left: 0;
-    transition: all 1s;
-    z-index: 9;
-}
-
-.title>span {
-    font-size: 18px;
-    display: block;
-    color: #f47a93;
-}
-
-.desc {
-    width: 160px;
-    font-family: 'Raleway', sans-serif;
-    font-size: 14px;
-    color: #404040;
-    left: 0;
-    bottom: 2rem;
-    line-height: 1.8;
-    position: relative;
-    transition: all 1s;
-}
-
-.main:hover .container .title,
-.main:hover .container .desc {
-    left: 62%;
-}
-
-/*mode sombre activation */
-.lightMode{
+body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("/assets/images/wallpaper.jpg");
+  background-size: cover;
+  background-position: center;
+  background-position-y: 100%;
+  background-repeat: no-repeat;
+  background-clip: border-box;
+  OVERFLOW: hidden;
 }
+
+.all {
+  background-color: rgba(20, 20, 20, 0.516);
+  display: flex;
+  gap: 10px;
+  height: 97vh;
+  width: 91%;
+  margin: 5vh;
+  border-radius: 25px;
+}
+
+.first {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  padding: 2vw;
+}
+
+.library {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 60%;
+  color: white;
+  gap: 3vh;
+}
+
+.library h1 {
+  font-style: oblique;
+}
+
+.library a {
+  padding: 2px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-decoration: none;
+  color: rgb(255, 255, 179);
+}
+
+.library a:hover {
+  font-size: medium;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 168, 0.132);
+}
+
+.Kaporal a img {
+  width: 15vw;
+}
+
+/*seconde partie*/
+.second {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.578);
+  width: 80%;
+  max-height: 100%;
+  border-radius: 25px;
+  justify-content: space-between;
+}
+
+
+/*seconde partie Top all*/
+.TopALL {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  max-width: 100%;
+  height: 93vh;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 3vw;
+  max-height: 100%;
+  OVERFLOW-Y: auto;
+  margin-bottom: 30px;
+
+  /* Add the scrollbar style */
+  scrollbar-width: none;
+}
+
+.card {
+  margin: 2vh 0;
+  width: 210px;
+  height: 290px;
+  border: solid 3px #272727;
+  border-radius: 19px;
+  padding: 1.5rem;
+  background: white;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  transition: 0.4s ease-out;
+  box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* bouton like */
+button.like-button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-image: url('/assets/icons/coeur-brise.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.card.liked .like-button {
+  background-image: url('/assets/icons/coeur.png'); 
+}
+.card:hover {
+  transform: translateY(20px);
+}
+
+.card:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.card:hover:before {
+  opacity: 1;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 15px;
+}
+
+.card .info {
+  max-height: 250px;
+  max-width: 200px;
+  position: relative;
+  z-index: 3;
+  color: white;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.5s;
+}
+
+.card:hover .info {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.card .info h1 {
+  margin: 0px;
+  font-size: calc(0.9em + 1.1vh);
+  margin-bottom: 5px;
+}
+
+.card .info p {
+  letter-spacing: 1px;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.card .info button.buttoncard {
+  padding: 0.6rem;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  background: white;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.4s ease;
+}
+
+.card .info button:hover {
+  background: dodgerblue;
+  color: white;
+}
+
+/*mode sombre activation */
+.lightMode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
 [type="checkbox"]:checked,
-[type="checkbox"]:not(:checked){
+[type="checkbox"]:not(:checked) {
   opacity: 0;
   pointer-events: none;
 }
-.dark-light:checked + label,
-.dark-light:not(:checked) + label{
+
+.dark-light:checked+label,
+.dark-light:not(:checked)+label {
   z-index: 20000;
   display: block;
   border-radius: 50%;
@@ -227,13 +251,15 @@ img:hover{
   height: 35px;
   cursor: pointer;
   transition: all 200ms linear;
-  box-shadow: 0 0 25px rgba(255,235,167,.45);
+  box-shadow: 0 0 25px rgba(255, 235, 167, .45);
 }
-.dark-light:checked + label{
+
+.dark-light:checked+label {
   transform: rotate(360deg);
 }
-.dark-light:checked + label:after,
-.dark-light:not(:checked) + label:after{
+
+.dark-light:checked+label:after,
+.dark-light:not(:checked)+label:after {
   /* position: absolute;
   content: '';
   top: 1px;
@@ -247,11 +273,13 @@ img:hover{
   transition: all 200ms linear;
   opacity: 0;
 }
-.dark-light:checked + label:after {
+
+.dark-light:checked+label:after {
   opacity: 1;
 }
-.dark-light:checked + label:before,
-.dark-light:not(:checked) + label:before{
+
+.dark-light:checked+label:before,
+.dark-light:not(:checked)+label:before {
   /* position: absolute; */
   content: '';
   /* top: 0;
@@ -269,11 +297,13 @@ img:hover{
   background-position: center;
   transition: all 200ms linear;
 }
-.dark-light:checked + label:before{
+
+.dark-light:checked+label:before {
   background-color: #48dbfb;
   background-image: url('/assets/icons/sun.svg');
 }
-.light-back{
+
+.light-back {
   position: fixed;
   top: 0;
   left: 0;
@@ -288,9 +318,11 @@ img:hover{
   transition: all 200ms linear;
   opacity: 0;
 }
-.dark-light:checked ~ .light-back{
+
+.dark-light:checked~.light-back {
   opacity: 1;
 }
+
 
 
 
@@ -333,7 +365,6 @@ box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
   inset -4px -4px 6px 0 rgba(255,255,255,.2),
   inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
 }
-
 .search-container input[type="radio"],.search-container label {
   display: none;
   
@@ -375,7 +406,6 @@ img{
 .search-container .search-btn .fas{
   color: #5cbdbb;
 }
-
 
 
 

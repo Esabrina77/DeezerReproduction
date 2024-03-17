@@ -1,39 +1,91 @@
 {{define "search"}}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats de recherche</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/styles/editorial.css">
+    <title> {{.SearchType}}-{{.Query}}</title>
 </head>
+
 <body>
-    <h1>Résultats de recherche</h1>
-    <!-- Afficher les résultats paginés ici -->
-<ul id="results-list">
-    <!-- Boucle sur les résultats paginés -->
-    {{range .Results}}
-    <li>{{.}}</li>
-    {{end}}
-</ul>
-    <!-- Afficher les liens de pagination ici -->
-    <div id="pagination-container">
-        <!-- Générer les liens de pagination -->
-        {{if .HasPreviousPage}}
-        <a href="/search?query={{.Query}}&page={{.PreviousPage}}">Précédent</a>
-        {{end}}
-        
-        {{range .Pages}}
-            {{if eq .CurrentPage .PageNumber}}
-                <strong>{{.PageNumber}}</strong>
-            {{else}}
-                <a href="/search?query={{$.Query}}&page={{.PageNumber}}">{{.PageNumber}}</a>
-            {{end}}
-        {{end}}
-        
-        {{if .HasNextPage}}
-        <a href="/search?query={{.Query}}&page={{.NextPage}}">Suivant</a>
-        {{end}}
-    </div>
+    <div class="all">
+        <div class="first">
+            <div class="Kaporal">
+                <a href="/home"><img src="/assets/icons/LOGO.png"></a>
+            </div>
+            <div class="library">
+                <h1>Library</h1>
+                <a href="/radio">radios</a>
+                <a href="/podcast">Podcasts</a>
+                <a href="/allArtists">artists</a>
+                <a href="/editorial">editorials</a>
+                <h1>Ma musique</h1>
+                <a href="/favoris">Mes Favoris</a>
+            </div>
+        </div>
+        <!-- .manga$*4 -->
+
+        <div class="second">
+            <div class="search">
+                <div class="recherche">
+                    <form action="/search" method="GET" class="search-container">
+                        <input type="text" name="query" placeholder="Search..." class="search-input" required>
+                        <input type="radio" name="search_type" value="artist" id="radio-artist" required>
+                        <label for="radio-artist">Artiste</label>
+                        <input type="radio" name="search_type" value="album" id="radio-album" required>
+                        <label for="radio-album">Album</label>
+                        <input type="radio" name="search_type" value="track" id="radio-track" required>
+                        <label for="radio-track">Piste</label>
+                        <button type="submit" class="search-btn"><img class="fas fa-search"
+                                src="/assets/icons/chercher.png"></button>
+                    </form>
+                </div>
+                <div class="lightMode">
+                    <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
+                    <label for="dark-light"></label>
+                    <div class="light-back"></div>
+                </div>
+            </div>
+            <div class="TopALL">
+                {{if eq .SearchType "artist"}}
+                <div class="wrapper">
+                    {{range .Data}}
+                    <div class="card">
+                        <img src="{{.Artist.Picture_big}}" alt="{{.Artist.Name}}" />
+                        <div class="info">
+                           
+                          <h1> {{.Artist.Name}}</h1>
+                          <a href="/artist/{{.Artist.ID}}">
+                            <button class="buttoncard">Voir plus</button>
+                          </a>
+                          <button class="like-button" data-card-id="{{.Artist.ID}}"></button>
+                        </div>
+                      </div>
+                    {{ end }}
+                </div>
+
+                {{else if eq .SearchType "album"}}
+                <div class="wrapper">
+                    {{range .Data}}
+                    <div class="card">
+                        <img src="{{.Album.Cover_big}}" alt="{{.Album.Title}}" />
+                        <div class="info">
+                           
+                          <h1>{{.Album.Title}}</h1>
+                          <a href="/album/{{.Album.ID}}">
+                            <button class="buttoncard">Voir plus</button>
+                          </a>
+                          <button class="like-button" data-card-id="{{.Album.ID}}"></button>
+                        </div>
+                      </div>
+                    {{ end }}
+                </div>         
+                {{ end }}
+                
+            </div>
 </body>
 </html>
 {{end}}

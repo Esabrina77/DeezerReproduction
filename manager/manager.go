@@ -17,6 +17,11 @@ type Description struct {
 	Phrases []string `json:"phrases"`
 }
 
+// type Page struct {
+// 	PageNumber  int  `json:"page_number"`
+// 	CurrentPage bool `json:"current_page"`
+// }
+
 var ListUser []LoginUser
 
 // structures pour les charts
@@ -262,4 +267,34 @@ func PrintColorResult(color string, message string) {
 	fmt.Printf("%s%s\033[0m", colorCode, message)
 }
 
-//RECUP DES INFOS D'un artiste
+// structure pour la fonctionnalité recherche & pagination
+type SearchResult struct {
+	Query      string `json:"query"`
+	SearchType string `json:"search_type"`
+	Data       []struct {
+		Artist struct {
+			ID             int    `json:"id"`
+			Name           string `json:"name"`
+			Link           string `json:"link"`
+			Picture        string `json:"picture"`
+			Picture_small  string `json:"picture_small"`
+			Picture_medium string `json:"picture_medium"`
+			Picture_big    string `json:"picture_big"`
+			Picture_xl     string `json:"picture_xl"`
+			Radio          bool   `json:"radio"`
+			Tracklist      string `json:"tracklist"`
+			Type           string `json:"type"`
+		} `json:"artist"`
+		Album struct {
+			ID           int    `json:"id"`
+			Title        string `json:"title"`
+			Cover        string `json:"cover"`
+			Cover_small  string `json:"cover_small"`
+			Cover_medium string `json:"cover_medium"`
+			Cover_big    string `json:"cover_big"`
+			Cover_xl     string `json:"cover_xl"`
+			Link         string `json:"link"`
+			Type         string `json:"type"`
+		} `json:"album"`
+	} `json:"data"`
+}
