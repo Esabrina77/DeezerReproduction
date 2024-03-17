@@ -412,8 +412,36 @@ func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Utilisez LE modèle de page pour afficher les données
-	inittemplate.Temp.ExecuteTemplate(w, "album", album)
+	// Faites une autre requête HTTP pour récupérer les pistes de l'album
+	tracksResponse, err := http.Get(album.Tracklist)
+	if err != nil {
+		log.Println("Erreur lors de la requête pour les pistes de l'album :", err)
+		http.Error(w, "Erreur lors de la récupération des pistes de l'album", http.StatusInternalServerError)
+		return
+	}
+	defer tracksResponse.Body.Close()
+
+	// Analysez la réponse JSON dans une structure temporaire
+	var tracksResponseData struct {
+		Tracks []manager.Tracks `json:"data"`
+	}
+	err = json.NewDecoder(tracksResponse.Body).Decode(&tracksResponseData)
+	if err != nil {
+		log.Println("Erreur lors de l'analyse de la réponse JSON des pistes de l'album :", err)
+		http.Error(w, "Erreur lors de l'analyse de la réponse JSON des pistes de l'album", http.StatusInternalServerError)
+		return
+	}
+
+	// Utilisez LE modèle de page pour afficher les données de l'album et les pistes associées
+	data := struct {
+		Album  manager.Album
+		Tracks []manager.Tracks
+	}{
+		Album:  album,
+		Tracks: tracksResponseData.Tracks,
+	}
+	log.Print(tracksResponse)
+	inittemplate.Temp.ExecuteTemplate(w, "album", data)
 }
 
 // fonctionnalité d e recherche

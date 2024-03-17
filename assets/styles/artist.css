@@ -401,7 +401,8 @@ box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
 
 .search-container input[type="radio"],.search-container label {
   display: none;
-  
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
 }
 .search-container:hover input[type="radio"],.search-container:hover label {
   display: block;

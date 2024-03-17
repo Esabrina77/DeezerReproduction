@@ -383,12 +383,13 @@ box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
   inset -4px -4px 6px 0 rgba(255,255,255,.2),
   inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
 }
-input[type="radio"] label{
- 
-}
+
 .search-container input[type="radio"],.search-container label {
   display: none;
-  
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  margin: 2px;
 }
 .search-container:hover input[type="radio"],.search-container:hover label {
   display: block;
