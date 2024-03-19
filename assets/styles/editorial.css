@@ -179,7 +179,7 @@ button.like-button {
   object-fit: cover;
   position: absolute;
   top: 0;
-  left: 0;
+  left: -10px;
   border-radius: 15px;
 }
 
@@ -192,6 +192,7 @@ button.like-button {
   opacity: 0;
   transform: translateY(30px);
   transition: 0.5s;
+  /* background: antiquewhite; */
 }
 
 .card:hover .info {
@@ -367,7 +368,7 @@ box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
 }
 .search-container input[type="radio"],.search-container label {
   display: none;
-  display: block;
+  /* display: block; */
   font-family: "Poppins", sans-serif;
   font-size: 12px;
   margin: 2px;
@@ -476,7 +477,7 @@ img{
     height: 200px;
   }
   .card .info h1 {
-  font-size: 16px;
+  font-size: 9px;
   }
  
 

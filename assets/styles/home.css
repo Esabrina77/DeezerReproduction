@@ -488,10 +488,19 @@ img{
     border-radius: 0;
   }
   .TopALL {
-    flex-direction: row;
+    width: 100%;
+background-color: #052898;
     display: flex;
-    
   }
+  .Top{
+    width: 100%;
+  }
+.Charts{
+  width: 100%;
+}
+.FamousSong{
+  width: 100%;
+}
   .card{
     width: 150px;
     height: 200px;
@@ -499,7 +508,9 @@ img{
   .card .info h1 {
   font-size: 16px;
   }
- 
+ .FavoirsArt{
+  display: none;
+ }
 
   .search{
     border-radius: 0 0  20px 20px;

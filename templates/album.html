@@ -48,16 +48,15 @@
       </div>
       <div class="TopALL">
         <div class="imageBG">
-          <img>
         </div>
         <div class="allSongs">
         {{range .Tracks}}
         <div class="track">
       <div class="md5">
-  <img src="{{.Md5Image}}" alt="{{.Title}}">
+     <img src="{{.Album.CoverBig}}" alt="{{.Title}}">
       </div>
       <div class="Title">
-        <p>{{.Title}} - {{.Duration}} seconds</p>
+        <p>{{.Title}}</p>
       </div>
       <div>
         <a href="{{.Preview}}" id="playMusic"><button class="trackButton">Ecouter</button></a>
@@ -65,7 +64,36 @@
     </div>
     {{end}}
   </div>
+    <!-- jouer de la musique -->
+    <div class="play-music">
+      <audio id="audioPlayer" controls>
+          <source id="audioSource" type="audio/mp3">
+          Format non pris en Charge.
+      </audio>
+  </div>
       </div>
+      <script>
+        //JOUER DE LA MUSIQUE
+        //Recup  des elements des boutouns play
+        const playMusic = document.getElementById('playMusic');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioSource = document.getElementById('audioSource');
+        const progressBar = document.getElementById('progressBar');
+
+        // donner une action à chaque bouton
+        playMusic.addEventListener('click', (event) => {
+            event.preventDefault(); // Empêche la redirection par défaut du lien
+            const audioURL = playMusic.href;
+            audioSource.src = audioURL;
+            audioPlayer.load(); // Charge la piste audio
+            audioPlayer.play(); // Lecture de la piste audio chargée
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.value = percentage;
+        });
+    </script>
 </body>
 
 </html>
