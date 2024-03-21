@@ -169,7 +169,7 @@ type Tracks struct {
 	Preview               string  `json:"preview"`
 	Md5Image              string  `json:"md5_image"`
 	Artist                *Artist `json:"artist"`
-	Album                 Album   `json:"album"`
+	Album                 *Album  `json:"album"`
 	Type                  string  `json:"type"`
 }
 
@@ -226,6 +226,8 @@ func RetrieveUser() []LoginUser {
 
 // Marquer ( enregistrer) les nouveaux users dans le fichiers De login
 func MarkLogin(email string, password string, pseudo string) {
+	//genrer le hash du mot de passe
+
 	var newLogin = LoginUser{
 		Email:    email,
 		Password: password,

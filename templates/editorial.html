@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/styles/editorial.css">
-    <title>editorial</title>
+    <title>Editorial</title>
 </head>
 
 <body>
@@ -19,8 +19,6 @@
             <div class="library">
                 <h1>Library</h1>
                 <a href="/radio">radios</a>
-                <a href="/podcast">Podcasts</a>
-                <a href="/allArtists">artists</a>
                 <a href="/editorial">editorials</a>
                 <h1>Ma musique</h1>
                 <a href="/favoris">Mes Favoris</a>
@@ -57,39 +55,29 @@
                         <img src="{{ .PictureBig }}" alt="{{ .PictureBig }}">
                         <div class="info">
                           <h1>{{ .Name }}</h1>
-                          <p>{{.Type}}</p>
                           <a href="https://www.deezer.com/fr/editorial/{{.ID}}">
                             <button class="buttoncard">Voir plus</button>
                           </a>
-                          <button class="like-button" data-card-id="{{.ID}}"></button>
                         </div>
                       </div>
                     {{ end }}
                 </div>
             </div>
             <script>
-document.addEventListener('DOMContentLoaded', function () {
-  var likeButtons = document.querySelectorAll('.like-button');
 
-  likeButtons.forEach(function (likeButton) {
-    var cardId = likeButton.dataset.cardId; // Récupérer l'ID de l'élément
-
-    likeButton.addEventListener('click', function () {
-      if (likeButton.classList.contains('liked')) {
-        likeButton.classList.remove('liked');
-        localStorage.removeItem(cardId);
-      } else {
-        likeButton.classList.add('liked');
-        localStorage.setItem(cardId, 'true');
-      }
-    });
-
-    // Vérifier si le bouton de like est déjà activé
-    if (localStorage.getItem(cardId)) {
-      likeButton.classList.add('liked');
-    }
-  });
+// Fonction pour lire le message vocal de bienvenue
+function playWelcomeMessage() {
+    const message = `Ici,retrouvez tous les éditoriaux deezer`;
+    msg.lang = 'fr-FR'; // Définir la langue sur français
+    const msg = new SpeechSynthesisUtterance(message);
+    window.speechSynthesis.speak(msg);
+}
+// Lire le messagelorsque la page est chargée
+window.addEventListener('load', () => {
+    playWelcomeMessage();
 });
+
+       
             </script>
 </body>
 

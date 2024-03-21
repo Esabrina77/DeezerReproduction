@@ -19,8 +19,6 @@
             <div class="library">
                 <h1>Library</h1>
                 <a href="/radio">radios</a>
-                <a href="/podcast">Podcasts</a>
-                <a href="/allArtists">artists</a>
                 <a href="/editorial">editorials</a>
                 <h1>Ma musique</h1>
                 <a href="/favoris">Mes Favoris</a>
@@ -56,13 +54,11 @@
                     <div class="card">
                         <img src="{{.Artist.Picture_big}}" alt="{{.Artist.Name}}" />
                         <div class="info">
-                           
                           <h1> {{.Artist.Name}}</h1>
                           <a href="/artist/{{.Artist.ID}}">
                             <button class="buttoncard">Voir plus</button>
                           </a>
-                          <button class="like-button" data-card-id="{{.Artist.ID}}"></button>
-                        </div>
+                         </div>
                       </div>
                     {{ end }}
                 </div>
@@ -78,14 +74,29 @@
                           <a href="/album/{{.Album.ID}}">
                             <button class="buttoncard">Voir plus</button>
                           </a>
-                          <button class="like-button" data-card-id="{{.Album.ID}}"></button>
-                        </div>
+                         </div>
                       </div>
                     {{ end }}
                 </div>         
                 {{ end }}
                 
             </div>
+            <script>
+                //Bienvenue à l'utilisateur
+                const pseudo = "{{.Query}}";
+        // Fonction pour lire le message vocal de bienvenue avec le pseudo
+        function playWelcomeMessage(pseudo) {
+            const message = `Tous les résultats concernant: ${pseudo}`;
+            const msg = new SpeechSynthesisUtterance(message);
+            msg.lang = 'fr-FR';
+            window.speechSynthesis.speak(msg);
+        }
+        // Lire le message d'accueil lorsque la page est chargée
+        window.addEventListener('load', () => {
+            playWelcomeMessage(pseudo);
+        });
+        
+                </script>
 </body>
 </html>
 {{end}}

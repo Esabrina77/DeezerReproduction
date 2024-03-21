@@ -18,8 +18,6 @@
             <div class="library">
                 <h1>Library</h1>
                 <a href="/radio">radios</a>
-                <a href="/podcast">Podcasts</a>
-                <a href="/allArtists">artists</a>
                 <a href="/editorial">editorials</a>
                 <h1>Ma musique</h1>
                 <a href="/favoris">Mes Favoris</a>
@@ -56,11 +54,8 @@
                         <img src="{{ .PictureBig }}" alt="{{ .Title }}">
                         <div class="info">
                             <h1>{{.Title}}</h1>
-                            <p>{{.Type}}</p>
-                            <p>{{.ID}}</p>
                             <a href="https://www.deezer.com/fr/radio/{{.ID}}"><button> Voir plus</button></a>
-                            <button class="like-button"></button>
-                        </div>
+                           </div>
                     </div>
                     {{ end }}
                 </div>

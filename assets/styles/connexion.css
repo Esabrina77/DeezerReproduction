@@ -323,12 +323,13 @@ a>img {
 
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 520px) {
     body {
         background-image: url('/assets/images/399shots_so.png');
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+        height: 100svh;
     }
     /* HAMBURGER */
     /*Properties for Nav-bar*/

@@ -47,19 +47,20 @@
         </div>
       </div>
       <div class="TopALL">
-        <div class="imageBG">
-        </div>
         <div class="allSongs">
         {{range .Tracks}}
         <div class="track">
       <div class="md5">
-     <img src="{{.Album.CoverBig}}" alt="{{.Title}}">
+     <img src="/assets/images/icons8-musical-note-30.png" alt="{{.Artist.Name}}">
       </div>
       <div class="Title">
         <p>{{.Title}}</p>
       </div>
+      <div class="LIKE">
+        <img src="/assets/icons/coeur-brise.png" class="PushLike">
+      </div>
       <div>
-        <a href="{{.Preview}}" id="playMusic"><button class="trackButton">Ecouter</button></a>
+        <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a>
       </div>
     </div>
     {{end}}
@@ -73,14 +74,42 @@
   </div>
       </div>
       <script>
+       
+        //Bienvenue à l'utilisateur
+        const pseudo = "{{.Album.Title}}";
+// Fonction pour lire le message vocal de bienvenue avec le pseudo
+function playWelcomeMessage(pseudo) {
+    const message = `Ici,retrouvez toutes les tracks de l'album ${pseudo}`;
+    msg.lang = 'fr-FR'; // Définir la langue sur français
+    const msg = new SpeechSynthesisUtterance(message);
+    window.speechSynthesis.speak(msg);
+}
+// Lire le message d'accueil lorsque la page est chargée
+window.addEventListener('load', () => {
+    playWelcomeMessage(pseudo);
+});
+        //Fonctionnalité favoris
+        const likeButtons = document.querySelectorAll('.LIKE');
+
+likeButtons.forEach(likeButton => {
+    const likeImg = likeButton.querySelector('.PushLike');
+    likeButton.addEventListener('click', function() {
+        if (likeImg.src.includes('coeur-brise.png')) {
+            likeImg.src = '/assets/icons/coeur.png';
+        } else {
+            likeImg.src = '/assets/icons/coeur-brise.png';
+        }
+    });
+});
+
         //JOUER DE LA MUSIQUE
         //Recup  des elements des boutouns play
-        const playMusic = document.getElementById('playMusic');
+        const playMusics = document.querySelectorAll('.playMusic');
         const audioPlayer = document.getElementById('audioPlayer');
         const audioSource = document.getElementById('audioSource');
-        const progressBar = document.getElementById('progressBar');
-
+      
         // donner une action à chaque bouton
+        playMusics.forEach(playMusic => {
         playMusic.addEventListener('click', (event) => {
             event.preventDefault(); // Empêche la redirection par défaut du lien
             const audioURL = playMusic.href;
@@ -88,11 +117,7 @@
             audioPlayer.load(); // Charge la piste audio
             audioPlayer.play(); // Lecture de la piste audio chargée
         });
-
-        audioPlayer.addEventListener('timeupdate', () => {
-            const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-            progressBar.value = percentage;
-        });
+      });
     </script>
 </body>
 

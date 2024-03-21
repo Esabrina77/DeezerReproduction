@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 body {
@@ -18,11 +17,11 @@ body {
   background-position-y: 100%;
   background-repeat: no-repeat;
   background-clip: border-box;
-  OVERFLOW: hidden;
+  overflow: hidden;
 }
 
 .all {
-  background-color: rgba(20, 20, 20, 0.516);
+  background-color: rgba(100, 95, 95, 0.434);
   display: flex;
   gap: 10px;
   height: 97vh;
@@ -71,18 +70,18 @@ body {
   width: 15vw;
 }
 
+
 /*seconde partie*/
 .second {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.578);
+  background-color: rgb(223 223 223 / 46%);
   width: 80%;
   max-height: 100%;
   border-radius: 25px;
   justify-content: space-between;
 }
-
 
 /*seconde partie Top all*/
 .TopALL {
@@ -94,12 +93,19 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   overflow: hidden;
+}
+.imageBG{
+  display: none;
+}
+.textinfos{
+  display: grid;
+  flex-direction: column;
+  place-items: center;
 }
 .wrapper {
   display: flex;
@@ -108,19 +114,18 @@ body {
   max-width: 100%;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 3vw;
   max-height: 100%;
-  OVERFLOW-Y: auto;
+  overflow-y: auto;
   margin-bottom: 30px;
-
+  /* border-right: dashed 1px; */
   /* Add the scrollbar style */
   scrollbar-width: none;
 }
 
 .card {
-  margin: 2vh 0;
+   margin: 3vw; 
   width: 210px;
-  height: 290px;
+  height: 300px;
   border: solid 3px #272727;
   border-radius: 19px;
   padding: 1.5rem;
@@ -131,8 +136,7 @@ body {
   transition: 0.4s ease-out;
   box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.5);
 }
-
-/* bouton like */
+* bouton like */
 button.like-button {
   width: 30px;
   height: 30px;
@@ -176,23 +180,21 @@ button.like-button {
 .card img {
   width: 100%;
   height: 100%;
+  -o-object-fit: cover;
   object-fit: cover;
   position: absolute;
-  top: 0;
+  top: 0px;
   left: -10px;
   border-radius: 15px;
 }
 
 .card .info {
-  max-height: 250px;
-  max-width: 200px;
   position: relative;
   z-index: 3;
   color: white;
   opacity: 0;
   transform: translateY(30px);
   transition: 0.5s;
-  /* background: antiquewhite; */
 }
 
 .card:hover .info {
@@ -202,8 +204,7 @@ button.like-button {
 
 .card .info h1 {
   margin: 0px;
-  font-size: calc(0.9em + 1.1vh);
-  margin-bottom: 5px;
+  font-size:25px
 }
 
 .card .info p {
@@ -212,8 +213,8 @@ button.like-button {
   margin-top: 8px;
 }
 
-.card .info button.buttoncard {
-  padding: 0.6rem;
+.card .info button {
+  padding: 0.3rem;
   outline: none;
   border: none;
   border-radius: 3px;
@@ -229,22 +230,65 @@ button.like-button {
   color: white;
 }
 
+.Top {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+/*favORIS*/
+.FavoirsArt {
+  height: 97%;
+  margin-top: 3vh;
+  margin-bottom: 2px;
+  width: 30%;
+  border-radius: 25px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.artistDetails {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.imageArt {
+  margin: 2vh 0;
+  width: 210px;
+  height: 300px;
+  border: solid 3px #272727;
+  border-radius: 19px;
+  background: white;
+}
+
+.imageArt img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 15px;
+}
+
 /*mode sombre activation */
-.lightMode {
+.lightMode{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20%;
+  width: 30%;
 }
-
 [type="checkbox"]:checked,
-[type="checkbox"]:not(:checked) {
+[type="checkbox"]:not(:checked){
   opacity: 0;
   pointer-events: none;
 }
-
-.dark-light:checked+label,
-.dark-light:not(:checked)+label {
+.dark-light:checked + label,
+.dark-light:not(:checked) + label{
   z-index: 20000;
   display: block;
   border-radius: 50%;
@@ -252,15 +296,13 @@ button.like-button {
   height: 35px;
   cursor: pointer;
   transition: all 200ms linear;
-  box-shadow: 0 0 25px rgba(255, 235, 167, .45);
+  box-shadow: 0 0 25px rgba(255,235,167,.45);
 }
-
-.dark-light:checked+label {
+.dark-light:checked + label{
   transform: rotate(360deg);
 }
-
-.dark-light:checked+label:after,
-.dark-light:not(:checked)+label:after {
+.dark-light:checked + label:after,
+.dark-light:not(:checked) + label:after{
   /* position: absolute;
   content: '';
   top: 1px;
@@ -274,13 +316,11 @@ button.like-button {
   transition: all 200ms linear;
   opacity: 0;
 }
-
-.dark-light:checked+label:after {
+.dark-light:checked + label:after {
   opacity: 1;
 }
-
-.dark-light:checked+label:before,
-.dark-light:not(:checked)+label:before {
+.dark-light:checked + label:before,
+.dark-light:not(:checked) + label:before{
   /* position: absolute; */
   content: '';
   /* top: 0;
@@ -298,13 +338,11 @@ button.like-button {
   background-position: center;
   transition: all 200ms linear;
 }
-
-.dark-light:checked+label:before {
+.dark-light:checked + label:before{
   background-color: #48dbfb;
   background-image: url('/assets/icons/sun.svg');
 }
-
-.light-back {
+.light-back{
   position: fixed;
   top: 0;
   left: 0;
@@ -319,14 +357,9 @@ button.like-button {
   transition: all 200ms linear;
   opacity: 0;
 }
-
-.dark-light:checked~.light-back {
+.dark-light:checked ~ .light-back{
   opacity: 1;
 }
-
-
-
-
 /*Recherche*/
 .recherche{
   display: flex;
@@ -366,12 +399,11 @@ box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
   inset -4px -4px 6px 0 rgba(255,255,255,.2),
   inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
 }
+
 .search-container input[type="radio"],.search-container label {
   display: none;
-  /* display: block; */
   font-family: "Poppins", sans-serif;
   font-size: 12px;
-  margin: 2px;
 }
 .search-container:hover input[type="radio"],.search-container:hover label {
   display: block;
@@ -413,13 +445,14 @@ img{
 
 
 
+
 /* ALERTE RESPONSIVE */
 @media only screen and (max-width: 768px) {
   body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100svh;
     width: 100vw;
     margin: 0;
     padding: 0;
@@ -428,10 +461,10 @@ img{
     display: flex;
     align-items: center;
     flex-direction: column-reverse;
-    width: inherit;
-    height:inherit;
+    height: 100dvh;
+    width:inherit;
     margin: 0;
-    background-color: rgba(148, 148, 148, 0.578);
+    background-color: rgb(226 226 226 / 50%);
     border-radius: 0;
   }
   .first{
@@ -446,7 +479,9 @@ img{
     flex-direction: row;
     align-items: center;
     text-align: center;
+    color: #fff;
     box-shadow: #272727;
+    margin-bottom: 10px;
   }
   .library h1{
     display: none;
@@ -470,16 +505,68 @@ img{
     border-radius: 0;
   }
   .TopALL {
+    flex-direction: column-reverse;
+    /* gap: 0; */
+  }
+  .FavoirsArt{
+    /* height: 30%; */
+    width: 100%;
+    margin: 0;
+  }
+  .artistDetails{
+    display: flex;
+    gap: 20px;
     flex-direction: row;
   }
+  .imageArt{
+    width: 113px;
+    height: 150px;
+  }
+  .textinfos{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+  }
+  .Top{
+    height: 70%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    border-radius: 50px;
+  }
+  .imageBG{
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 50px;
+  }
+  .imageBG img {
+    width: 100%;
+    height: 100%;
+    /* filter: grayscale(0.5); */
+    filter: opacity(0.1);
+    border-radius: 30px;
+}
   .card{
-    width: 150px;
-    height: 200px;
+    width: 123px;
+    height: 170px;
+    margin: 10px;
   }
+
+.wrapper {gap: 0;padding: 0;margin: 0;}
   .card .info h1 {
-  font-size: 9px;
+  font-size: 11px;
   }
- 
+
+  .card img {
+ left: -10px;
+ }
+ .card .info button {
+    padding:0.2rem;
+  }
 
   .search{
     border-radius: 0 0  20px 20px;

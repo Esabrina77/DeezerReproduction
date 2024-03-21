@@ -59,10 +59,8 @@
               <img src="{{.CoverXl}}" alt="{{.Title}}">
               <div class="info">
                 <h2>{{.Title}}</h2>
-                <p>{{.ID}}</p>
                 <a href="/album/{{.ID}}"><button> Voir plus</button></a>
-                <button class="like-button"></button>
-              </div>
+                </div>
             </div>
             {{ end }}
           </div>
@@ -79,6 +77,22 @@
           </div>
           </div>
         </div>
+        <script>
+        //Bienvenue à l'utilisateur
+        const pseudo = "{{.Artist.Name}}";
+// Fonction pour lire le message vocal de bienvenue avec le pseudo
+function playWelcomeMessage(pseudo) {
+    const message = `Ici,retrouvez tous sur ${pseudo}`;
+    msg.lang = 'fr-FR'; // Définir la langue sur français
+    const msg = new SpeechSynthesisUtterance(message);
+    window.speechSynthesis.speak(msg);
+}
+// Lire le message d'accueil lorsque la page est chargée
+window.addEventListener('load', () => {
+    playWelcomeMessage(pseudo);
+});
+
+        </script>
 </body>
 
 </html>

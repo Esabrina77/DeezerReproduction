@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -16,6 +18,7 @@ body {
   background-position-y: 100%;
   background-repeat: no-repeat;
   background-clip: border-box;
+ 
 }
 
 .all {
@@ -56,6 +59,7 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-decoration: none;
   color: rgb(255, 255, 179);
+  font-weight:bold;
 }
 
 .library a:hover {
@@ -73,7 +77,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.578);
+  background-color: rgb(255 255 255 / 58%);
   width: 80%;
   max-height: 100%;
   border-radius: 25px;
@@ -87,6 +91,13 @@ body {
   flex-direction: row;
   max-width: 100%;
   height: 93vh;
+  position: relative;
+}
+
+.play-music{
+  position:absolute;
+  bottom:3%;
+  
 }
 
 .Top {
@@ -129,11 +140,21 @@ body {
   flex-direction: column;
   height: 100%;
   width: 68%;
+  font-family:Poppins, Tahoma, sans-serif;
+  gap: 4px;
 }
 .infosSong a {
-  font-family: Geneva, Tahoma, sans-serif;
+  font-family: Poppins, Tahoma, sans-serif;
   text-decoration: none;
-  color: rgb(255, 255, 179);
+  color: rgb(0 0 0);
+  background:#53f9ffc9;
+  
+  width:120px;
+  padding:2px;
+  border-radius:50px;
+  border:inset 1px;
+    font-weight:bold;
+  text-align:center;
 }
 .infosSong p {
   font-style: oblique;
@@ -160,15 +181,18 @@ body {
 .textArt {
   display: flex;
   align-items: center;
+  font-family: Poppin,;
   justify-content: center;
   font-size: calc(0.9rem + 1vh);
+  font-family: 'Poppins',sans-serif;
   margin: 4vh 0 1vh 0;
 }
 
 .Charts {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   height: 30vh;
   padding: 2vh 1vw;
@@ -184,7 +208,7 @@ body {
   gap: 1vh;
   border-radius: 50px;
   padding: 1vw;
-  height: 23vh;
+  /* height: 23vh; */
   width: 12vw;
 }
 
@@ -201,9 +225,9 @@ body {
 }
 
 .name {
-  font-style: oblique;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  font-size: calc(0.4rem + 0.5vh);
+  /* font-style: oblique; */
+  font-family: Poppins, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: calc(0.4rem + 0.2vh);
   display: flex;
   height: 2vh;
   text-align: center;
@@ -212,7 +236,7 @@ body {
 
 .play-music {
   max-width: 50%;
-  width: 50%;
+  width:250px;
   display: flex;
   justify-content: center;
 }
@@ -238,7 +262,7 @@ body {
   cursor: pointer;
   border-radius: 50%;
   position: absolute;
-  top: 55%;
+  top: 48%;
   transform: translateY(-50%);
   transition: transform 0.3s, background-color 0.3s;
 }
@@ -366,6 +390,7 @@ body {
 form {
   display: flex;
   align-items: center;
+  color: black;
 }
 
 .search-container{
@@ -376,6 +401,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: black;
   cursor: pointer;
   transition: 0.8s;
 box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
@@ -386,7 +412,6 @@ box-shadow:  4px 4px 6px 0 rgba(255,255,255,.3),
 
 .search-container input[type="radio"],.search-container label {
   display: none;
-  display: block;
   font-family: "Poppins", sans-serif;
   font-size: 12px;
   margin: 2px;
@@ -437,17 +462,18 @@ img{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100svh;
     width: 100vw;
     margin: 0;
     padding: 0;
+    color:aliceblue
   }
   .all{
     display: flex;
     align-items: center;
     flex-direction: column-reverse;
     width: inherit;
-    height:inherit;
+    height: 100%;
     margin: 0;
     background-color: rgba(148, 148, 148, 0.578);
     border-radius: 0;
@@ -470,7 +496,7 @@ img{
     display: none;
   }
   .library a {
-    font-weight: 200;
+    font-weight:800;
     color: black;
   }
 
@@ -489,29 +515,84 @@ img{
   }
   .TopALL {
     width: 100%;
-background-color: #052898;
     display: flex;
+    /* position: relative; */
   }
   .Top{
     width: 100%;
   }
-.Charts{
-  width: 100%;
-}
 .FamousSong{
   width: 100%;
-}
-  .card{
+} 
+.card{
     width: 150px;
     height: 200px;
   }
-  .card .info h1 {
+.card .info h1 {
   font-size: 16px;
   }
  .FavoirsArt{
   display: none;
  }
 
+h6 {
+  display:none;
+}
+ h4{
+       display:none;
+  }
+  .infosSong p {
+     display:none;
+  }
+ /* MUQIQUE POPULAIRE */
+ .Charts{
+  width: 90%;
+  max-width:100vw;
+  max-height:20vh;
+  /* justify-content: space-evenly; */
+  /* align-items:center; */
+  gap: 0;
+  padding: 0;
+  padding-right: 50px;
+   padding-left:30px;
+}
+  .ChartArtist{
+    flex-direction:column;
+    align-items:center;
+  }
+.ChartArtist-image{
+  margin:0;
+  padding:0;
+}
+.ChartArtist-image img{
+  width: 70px;
+  background-color: #272727;
+}
+ .textArt{
+  width: 100%;
+ }
+  
+/*LES FLECHES */
+.prev-arrow {
+  left: 0;
+  margin: 0;
+}
+
+.next-arrow {
+  right: 0;
+}
+.prev-arrow,
+.next-arrow {
+  width: 20px;
+  height: 22px;
+  font-size: 18px;
+  padding: 1px;
+}
+/*music*/
+  .play-music{
+  bottom:1%;
+}
+ /* RECHERCHE */
   .search{
     border-radius: 0 0  20px 20px;
   }
@@ -529,6 +610,7 @@ background-color: #052898;
   }
   .search-container .search-input {
     font-size: 12px;
+    color: black;
   }
   
 }

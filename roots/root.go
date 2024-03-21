@@ -14,14 +14,13 @@ func InitServe() {
 	http.HandleFunc("/home", controller.HomeHandler)
 
 	http.HandleFunc("/genre", controller.GenreHandler)
-	http.HandleFunc("/allArtists", controller.AllArtistsHandler)
+	http.HandleFunc("/aboutUs", controller.AboutUsHandler)
 
 	http.HandleFunc("/artist/", controller.ArtistHandler)
 	http.HandleFunc("/search", controller.SearchHandler)
 	http.HandleFunc("/radio", controller.RadiosHandler)
 	http.HandleFunc("/editorial", controller.EditorialsHandler)
 	http.HandleFunc("/album/", controller.AlbumHandler)
-	http.HandleFunc("/filtered-radios", controller.FilteredRadiosHandler)
 	http.HandleFunc("/connexion", controller.ConnexionHandler)
 	http.HandleFunc("/inscription", controller.InscriptionHandler)
 	http.HandleFunc("/treatmentI", controller.TreatInscriptionHandler)

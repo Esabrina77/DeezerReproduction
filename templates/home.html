@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../assets/styles/home.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <title>Welcome Guys</title>
+    <title>Bienvenue {{.Pseudo}}</title>
 </head>
 
 <body>
@@ -19,8 +19,6 @@
             <div class="library">
                 <h1>Library</h1>
                 <a href="/radio">radios</a>
-                <a href="/podcast">Podcasts</a>
-                <a href="/allArtists">artists</a>
                 <a href="/editorial">editorials</a>
                 <h1>Ma musique</h1>
                 <a href="/favoris">Mes Favoris</a>
@@ -106,6 +104,23 @@
     </div>
 
     <script>
+        //Bienvenue à l'utilisateur
+        const pseudo = "{{.Pseudo}}";
+// Fonction pour lire le message vocal de bienvenue avec le pseudo
+const source = new URLSearchParams(window.location.search).get('source');
+
+if (source === 'connexion' || source === 'inscription') {
+    function playWelcomeMessage(pseudo) {
+        const message = `Connexion réussie, Bienvenue ${pseudo}, je serai votre guide`;
+        const msg = new SpeechSynthesisUtterance(message);
+        window.speechSynthesis.speak(msg);
+    }
+// Lire le message d'accueil lorsque la page est chargée
+window.addEventListener('load', () => {
+    playWelcomeMessage(pseudo);
+});
+}
+//'caroussel des artists'
         let currentArtistIndex = 0;
         const artists = document.querySelectorAll('.ChartArtist');
         function showNextArtists(direction) {
@@ -124,7 +139,6 @@
             }
         }
         showNextArtists(0);
-
 
         //JOUER DE LA MUSIQUE
         //Recup  des elements des boutouns play

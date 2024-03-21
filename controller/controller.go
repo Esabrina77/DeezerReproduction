@@ -18,10 +18,11 @@ import (
 	"time"
 
 	"github.com/gorilla/sessions"
+	// htgotts "github.com/hegedustibor/htgo-tts"
 )
 
 const (
-	Port            = "localhost:8080"
+	Port            = ":8080"
 	deezerAPI       = "https://api.deezer.com"
 	StripePublicKey = "pk_test_51OkP9QKa0BEOKwek4AcHZOLCTI4gsDDZSCzWGrRjQt8hHy8sCueAiNxxwnjbUAPfEEtOXRiJ72nF2oO5puW0G8oW00efoSjW1x"
 	StripeSecretKey = "sk_test_51OkP9QKa0BEOKwekOTKYJaJQPDSwfMmT4Fb8PtYYKgixcOyL5II3106UbajXitNMxy4MUAs767XG21ZE8JId4wKt00El13BkiO"
@@ -38,6 +39,33 @@ func SecretKey() string {
 	return base64.StdEncoding.EncodeToString(key)
 }
 
+// verif de la session
+func Connected(w http.ResponseWriter, r *http.Request) {
+	//user non connecté
+	session, err := store.Get(r, "session-name")
+	if err != nil || session.Values["pseudo"] == nil {
+		http.Redirect(w, r, "/connexion?error=SESSION_INVALID", http.StatusSeeOther)
+		return
+	}
+}
+
+// commande vocale pour détecter les actions fait sur le site
+// func WelcomeUserServe(session *sessions.Session, w http.ResponseWriter, r *http.Request) {
+// 	pseudo := session.Values["pseudo"].(string)
+// 	welcomeMessage := fmt.Sprintf(" l'utilisateur %s vient de connecter", pseudo)
+
+// 	cmd := exec.Command("powershell", "-Command", fmt.Sprintf("(New-Object -ComObject SAPI.SpVoice).Speak('%s')", welcomeMessage))
+// 	err := cmd.Run()
+// 	if err != nil {
+// 		fmt.Println("Error executing PowerShell command:", err)
+// 	}
+// }
+
+// AboutUsHandler
+func AboutUsHandler(w http.ResponseWriter, r *http.Request) {
+	inittemplate.Temp.ExecuteTemplate(w, "aboutUs", nil)
+}
+
 // Sécurisation des routes/gestions des erreurs de chargement de pages
 func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
@@ -47,11 +75,9 @@ func RessourceNotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "notFound", nil)
 }
 func ConnexionHandler(w http.ResponseWriter, r *http.Request) {
-
 	inittemplate.Temp.ExecuteTemplate(w, "connexion", nil)
 }
 func InscriptionHandler(w http.ResponseWriter, r *http.Request) {
-
 	inittemplate.Temp.ExecuteTemplate(w, "inscription", nil)
 }
 func TreatInscriptionHandler(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +98,6 @@ func TreatInscriptionHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if login {
-
 		http.Redirect(w, r, "/connexion?error=already_registred", http.StatusFound)
 	} else {
 		//IL S AGIT D'UNE PREMIERE CONNEXION !
@@ -97,14 +122,11 @@ func TreatInscriptionHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "ERREUR DE SESSION_2", http.StatusInternalServerError)
 			return
 		}
-
-		http.Redirect(w, r, "/home?success=Login_registred", http.StatusFound)
+		http.Redirect(w, r, "/home?source=inscription", http.StatusFound)
 	}
 }
 func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 	var session *sessions.Session
-	//recupérer les données du formulaire de connexion
-	// email := r.FormValue("email")
 	password := r.FormValue("password")
 	pseudo := r.FormValue("pseudo")
 
@@ -122,7 +144,7 @@ func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if login {
 		i := 0
-		//Creer une nouvelle session & stocker l'email
+		//Creer une nouvelle session & stocker le pseudo
 		var err error
 		session, err = store.Get(r, "session-name")
 		for i > 1 {
@@ -139,31 +161,19 @@ func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "ERREUR DE SESSION_2", http.StatusInternalServerError)
 			return
 		}
-
-		http.Redirect(w, r, "/home", http.StatusFound)
+		// Stockez le message d'accueil dans une structure de données accessible au modèle HTML
+		http.Redirect(w, r, "/home?source=connexion", http.StatusFound)
 	} else {
 		//rediriger vers la page de connexion avec un message d'erreur
 		http.Redirect(w, r, "/connexion?error=invalid_login_try_again", http.StatusFound)
 	}
 }
 
-// tous les artistes
-func AllArtistsHandler(w http.ResponseWriter, r *http.Request) {
-	response, err := http.Get(deezerAPI + "/artist")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer response.Body.Close()
-	var artistResp manager.ArtistResponse
-	if err := json.NewDecoder(response.Body).Decode(&artistResp); err != nil {
-		log.Fatal(err)
-
-	}
-	inittemplate.Temp.ExecuteTemplate(w, "allArtists", artistResp.Data)
-}
-
 // RADIO DEEZER
 func RadiosHandler(w http.ResponseWriter, r *http.Request) {
+	//verif de la session
+	Connected(w, r)
+	//user connecté
 	response, err := http.Get(deezerAPI + "/radio")
 	if err != nil {
 		log.Fatal(err)
@@ -180,37 +190,10 @@ func RadiosHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	inittemplate.Temp.ExecuteTemplate(w, "radio", radioResp.Data)
 }
-func FilteredRadiosHandler(w http.ResponseWriter, r *http.Request) {
-	letter := r.FormValue("letter")
-
-	response, err := http.Get(deezerAPI + "/radio")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer response.Body.Close()
-	var radioResp manager.RadioResponse
-	if err := json.NewDecoder(response.Body).Decode(&radioResp); err != nil {
-		log.Fatal(err)
-	}
-
-	// Filtrer les radios en fonction de la lettre sélectionnée
-	filteredRadios := make([]manager.Radio, 0)
-	for _, radio := range radioResp.Data {
-		if strings.HasPrefix(strings.ToLower(radio.Title), strings.ToLower(letter)) {
-			filteredRadios = append(filteredRadios, radio)
-		}
-	}
-
-	// Trier les radios par ordre alphabétique
-	sort.Slice(filteredRadios, func(i, j int) bool {
-		return strings.ToLower(filteredRadios[i].Title) < strings.ToLower(filteredRadios[j].Title)
-	})
-
-	inittemplate.Temp.ExecuteTemplate(w, "filtered-radios", filteredRadios)
-}
 
 // EDITORIAL DEEZER
 func EditorialsHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
 	response, err := http.Get(deezerAPI + "/editorial")
 	if err != nil {
 		log.Fatal(err)
@@ -223,11 +206,20 @@ func EditorialsHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "editorial", editorialResp.Data)
 }
 func GenreHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
 	inittemplate.Temp.ExecuteTemplate(w, "genre", nil)
 }
 
 // page d'acceuil
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
+	// Récupérer le pseudo de la session
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Erreur de session", http.StatusInternalServerError)
+		return
+	}
+	pseudo := session.Values["pseudo"].(string)
 
 	response, err := http.Get("https://api.deezer.com/chart")
 	if err != nil {
@@ -244,11 +236,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	topTrack := charts.Tracks.Data[0]
 	//Récuperer les 10 artistes les plus écouter en france
 	topArtists := charts.Artist.Data[:10]
-	// for _, artist := range topArtists {
-	// 	fmt.Println("Nom de l'artiste:", artist.Name)
-	// 	fmt.Println("Photo de l'artiste:", artist.PictureMedium)
-	// }
-	//Lecture du fichier Description.txt
 	descript, err := os.ReadFile("Description.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -259,15 +246,17 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	//génération d'un nombre aléatiore
 	rand.Seed(time.Now().UnixNano())
 	randomIndex := rand.Intn(len(description.Phrases))
-
+	//bienvenue au client
 	data := struct {
 		TopTrack    manager.Tracks
 		TopArtists  []manager.Artist
 		Description string
+		Pseudo      string
 	}{
 		TopTrack:    topTrack,
 		TopArtists:  topArtists,
 		Description: description.Phrases[randomIndex],
+		Pseudo:      pseudo,
 	}
 	inittemplate.Temp.ExecuteTemplate(w, "home", data)
 
@@ -311,6 +300,7 @@ func getArtistAlbums(artistID int) ([]manager.Album, error) {
 }
 
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
 	artistID := extractArtistID(r.URL.Path)
 	if artistID == -1 {
 		http.Error(w, "ID d'artiste invalide", http.StatusBadRequest)
@@ -380,6 +370,7 @@ func extractAlbumID(urlPath string) int {
 	return albumID
 }
 func AlbumHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
 	albumID := extractAlbumID(r.URL.Path)
 	log.Println(albumID)
 	if albumID == -1 {
@@ -421,7 +412,7 @@ func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer tracksResponse.Body.Close()
 
-	// Analysez la réponse JSON dans une structure temporaire
+	// Analyse de la réponse JSON dans une structure temporaire
 	var tracksResponseData struct {
 		Tracks []manager.Tracks `json:"data"`
 	}
@@ -432,7 +423,7 @@ func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Utilisez LE modèle de page pour afficher les données de l'album et les pistes associées
+	// user du Lmodèle de page pour afficher les données de l'album et les pistes associées
 	data := struct {
 		Album  manager.Album
 		Tracks []manager.Tracks
@@ -444,7 +435,7 @@ func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "album", data)
 }
 
-// fonctionnalité d e recherche
+// fonctionnalité de recherche
 func search(query string, searchType string) (manager.SearchResult, error) {
 	formattedQuery := strings.ReplaceAll(query, " ", "+")
 	url := fmt.Sprintf("https://api.deezer.com/search?q=%s:\"%s\"", searchType, formattedQuery)
@@ -469,6 +460,7 @@ func search(query string, searchType string) (manager.SearchResult, error) {
 }
 
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
 	query := r.FormValue("query")
 	searchType := r.FormValue("search_type")
 	// Création de la structure SearchResult
@@ -486,5 +478,15 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	// Ajouter les résultats à la structure SearchResult
 	result.Data = searchResult.Data
 	log.Print(result)
+	// SearchResultsquerVoice(query)
 	inittemplate.Temp.ExecuteTemplate(w, "search", result)
 }
+
+// func SearchResultsquerVoice(query string) {
+// 	Message := fmt.Sprintf(" Résultats des recherches pour: %s", query)
+// 	cmd := exec.Command("powershell", "-Command", fmt.Sprintf("(New-Object -ComObject SAPI.SpVoice).Speak('%s')", Message))
+// 	err := cmd.Run()
+// 	if err != nil {
+// 		fmt.Println("Error executing PowerShell command:", err)
+// 	}
+// }
