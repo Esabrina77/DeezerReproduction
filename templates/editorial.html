@@ -67,18 +67,15 @@
 
 // Fonction pour lire le message vocal de bienvenue
 function playWelcomeMessage() {
-    const message = `Ici,retrouvez tous les éditoriaux deezer`;
-    msg.lang = 'fr-FR'; // Définir la langue sur français
+    const message = `Ici, retrouvez tous les éditoriaux deezer.`;
     const msg = new SpeechSynthesisUtterance(message);
+    msg.lang = 'fr-FR'; // Définir la langue sur français
     window.speechSynthesis.speak(msg);
 }
 // Lire le messagelorsque la page est chargée
 window.addEventListener('load', () => {
     playWelcomeMessage();
-});
-
-       
-            </script>
+});</script>
 </body>
 
 </html>

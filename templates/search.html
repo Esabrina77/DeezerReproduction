@@ -79,24 +79,23 @@
                     {{ end }}
                 </div>         
                 {{ end }}
-                
             </div>
             <script>
                 //Bienvenue à l'utilisateur
                 const pseudo = "{{.Query}}";
-        // Fonction pour lire le message vocal de bienvenue avec le pseudo
-        function playWelcomeMessage(pseudo) {
-            const message = `Tous les résultats concernant: ${pseudo}`;
-            const msg = new SpeechSynthesisUtterance(message);
-            msg.lang = 'fr-FR';
-            window.speechSynthesis.speak(msg);
-        }
-        // Lire le message d'accueil lorsque la page est chargée
-        window.addEventListener('load', () => {
-            playWelcomeMessage(pseudo);
-        });
-        
-                </script>
+            
+                // Fonction pour lire le message vocal de bienvenue avec le pseudo
+                function playWelcomeMessage(pseudo) {
+                    const message = `Tous les résultats concernant: ${pseudo}`;
+                    const msg = new SpeechSynthesisUtterance(message);
+                    msg.lang = 'fr-FR'; // Définir la langue sur français
+                    window.speechSynthesis.speak(msg);
+                }
+                // Lire le message d'accueil lorsque la page est chargée
+                window.addEventListener('load', () => {
+                    playWelcomeMessage(pseudo);
+                });
+            </script>
 </body>
 </html>
 {{end}}

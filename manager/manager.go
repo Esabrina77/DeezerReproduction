@@ -207,6 +207,15 @@ type Album struct {
 	Type                  string `json:"type"`
 }
 
+func IsUnique(email string, pseudo string, users []LoginUser) bool {
+	for _, user := range users {
+		if user.Email == email || user.Pseudo == pseudo {
+			return false
+		}
+	}
+	return true
+}
+
 func RetrieveUser() []LoginUser {
 	data, err := os.ReadFile("login.json")
 
@@ -299,4 +308,60 @@ type SearchResult struct {
 			Type         string `json:"type"`
 		} `json:"album"`
 	} `json:"data"`
+}
+
+// FAVORIS
+// Structure pour représenter un utilisateur avec ses favoris
+type User struct {
+	Pseudo  string   `json:"pseudo"`
+	Favoris []Favori `json:"favoris"`
+}
+
+// Structure pour représenter un favori
+type Favori struct {
+	IDMusic string `json:"idMusic"`
+	Title   string `json:"title"`
+	Preview string `json:"preview"`
+}
+
+// Chemin du fichier Liked.json
+const LikedFilePath = "Liked.json"
+
+//
+
+// Fonction pour lire les données du fichier Liked.json
+func ReadLikedFile() ([]User, error) {
+	var users []User
+	file, err := os.ReadFile(LikedFilePath)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(file, &users)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+// Fonction pour écrire les données dans le fichier Liked.json
+func WriteLikedFile(users []User) error {
+	file, err := json.MarshalIndent(users, "", "    ")
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(LikedFilePath, file, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Fonction pour trouver un utilisateur dans la liste des utilisateurs
+func FindUser(users []User, pseudo string) int {
+	for i, user := range users {
+		if user.Pseudo == pseudo {
+			return i
+		}
+	}
+	return -1
 }

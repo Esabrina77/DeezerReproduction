@@ -17,6 +17,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	// htgotts "github.com/hegedustibor/htgo-tts"
 )
@@ -78,52 +79,50 @@ func ConnexionHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "connexion", nil)
 }
 func InscriptionHandler(w http.ResponseWriter, r *http.Request) {
-	inittemplate.Temp.ExecuteTemplate(w, "inscription", nil)
+	// Vérifier si une erreur est présente dans la requête
+	errorMessage := r.URL.Query().Get("error")
+	data := struct {
+		Error string
+	}{
+		Error: errorMessage,
+	}
+
+	// Exécuter le modèle en passant les données
+	inittemplate.Temp.ExecuteTemplate(w, "inscription", data)
 }
 func TreatInscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	var session *sessions.Session
-	//recupérer les données du formulaire d'enregistrement
+	// Récupérer les données du formulaire d'enregistrement
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 	pseudo := r.FormValue("pseudo")
 
-	//Enregistrer le nouvel Utilisateur
+	// Récupérer tous les utilisateurs existants
 	users := manager.RetrieveUser()
-	var login bool
-
-	for _, user := range users {
-		if user.Email == email && user.Password == password && user.Pseudo == pseudo {
-			//verifier si le login est déjà enregistré
-			login = true
-		}
+	// Vérifier l'unicité du pseudo, de l'e-mail et du mot de passe
+	if !manager.IsUnique(email, pseudo, users) {
+		http.Redirect(w, r, "/inscription?error=already_registered", http.StatusFound)
+		return
 	}
-	if login {
-		http.Redirect(w, r, "/connexion?error=already_registred", http.StatusFound)
-	} else {
-		//IL S AGIT D'UNE PREMIERE CONNEXION !
-		//rediriger vers la page dc'acceuil & enregistrer le login
-		manager.MarkLogin(email, password, pseudo)
+	// Enregistrer le nouvel utilisateur
+	manager.MarkLogin(email, password, pseudo)
 
-		i := 0
-		//Creer une nouvelle session & stocker l'email
-		var err error
-		session, err = store.Get(r, "session-name")
-		for i > 1 {
-			if err != nil {
-				http.Error(w, "ERREUR DE SESSION_1", http.StatusInternalServerError)
-				return
-			}
-		}
-
-		session.Values["email"] = email
-		fmt.Println("EMAIL RECU", email)
-		err = session.Save(r, w)
-		if err != nil {
-			http.Error(w, "ERREUR DE SESSION_2", http.StatusInternalServerError)
-			return
-		}
-		http.Redirect(w, r, "/home?source=inscription", http.StatusFound)
+	// Créer une nouvelle session pour l'utilisateur
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Erreur de session", http.StatusInternalServerError)
+		return
 	}
+
+	session.Values["pseudo"] = pseudo
+	session.Values["email"] = email
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'enregistrement de la session", http.StatusInternalServerError)
+		return
+	}
+	// Rediriger l'utilisateur vers la page d'accueil
+	http.Redirect(w, r, "/home?source=inscription", http.StatusFound)
 }
 func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 	var session *sessions.Session
@@ -136,7 +135,7 @@ func TreatConnexionHandler(w http.ResponseWriter, r *http.Request) {
 	var login bool
 
 	for _, user := range users {
-		if /*user.Email == email &&*/ user.Password == password && user.Pseudo == pseudo {
+		if user.Password == password && user.Pseudo == pseudo {
 			//verifier si le login est correcte
 			login = true
 			break
@@ -371,6 +370,14 @@ func extractAlbumID(urlPath string) int {
 }
 func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 	Connected(w, r)
+	// Récupérer le pseudo de la session
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Erreur de session", http.StatusInternalServerError)
+		return
+	}
+	pseudo := session.Values["pseudo"].(string)
+
 	albumID := extractAlbumID(r.URL.Path)
 	log.Println(albumID)
 	if albumID == -1 {
@@ -427,11 +434,12 @@ func AlbumHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Album  manager.Album
 		Tracks []manager.Tracks
+		Pseudo string
 	}{
 		Album:  album,
 		Tracks: tracksResponseData.Tracks,
+		Pseudo: pseudo,
 	}
-	log.Print(tracksResponse)
 	inittemplate.Temp.ExecuteTemplate(w, "album", data)
 }
 
@@ -482,11 +490,130 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	inittemplate.Temp.ExecuteTemplate(w, "search", result)
 }
 
-// func SearchResultsquerVoice(query string) {
-// 	Message := fmt.Sprintf(" Résultats des recherches pour: %s", query)
-// 	cmd := exec.Command("powershell", "-Command", fmt.Sprintf("(New-Object -ComObject SAPI.SpVoice).Speak('%s')", Message))
-// 	err := cmd.Run()
-// 	if err != nil {
-// 		fmt.Println("Error executing PowerShell command:", err)
-// 	}
-// }
+//	func SearchResultsquerVoice(query string) {
+//		Message := fmt.Sprintf(" Résultats des recherches pour: %s", query)
+//		cmd := exec.Command("powershell", "-Command", fmt.Sprintf("(New-Object -ComObject SAPI.SpVoice).Speak('%s')", Message))
+//		err := cmd.Run()
+//		if err != nil {
+//			fmt.Println("Error executing PowerShell command:", err)
+//		}
+//	}
+//
+// Gestionnaire pour ajouter ou retirer des favoris
+func AddRemoveHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("AddRemoveHandler")
+	Connected(w, r)
+	// Récupérer le pseudo de la session
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Erreur de session", http.StatusInternalServerError)
+		return
+	}
+	pseudo := session.Values["pseudo"].(string)
+
+	// Vérifier la méthode de la requête
+	switch r.Method {
+	case http.MethodPost:
+		log.Println("Ajout de la music...")
+		// Lire le corps de la requête JSON
+		var data manager.Favori
+		err := json.NewDecoder(r.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, "Erreur de décodage du JSON", http.StatusBadRequest)
+			return
+		}
+
+		// Lire les données actuelles du fichier Liked.json
+		users, err := manager.ReadLikedFile()
+		if err != nil {
+			http.Error(w, "Erreur de lecture du fichier Liked.json", http.StatusInternalServerError)
+			return
+		}
+
+		// Trouver l'utilisateur dans la liste des utilisateurs ou créer un nouvel utilisateur
+		userIndex := manager.FindUser(users, pseudo)
+		if userIndex == -1 {
+			// Créer un nouvel utilisateur avec aucun favori
+			newUser := manager.User{
+				Pseudo:  pseudo,
+				Favoris: []manager.Favori{},
+			}
+			users = append(users, newUser)
+			userIndex = len(users) - 1
+		}
+
+		// Ajouter le favori à l'utilisateur
+		addFavorite(&users[userIndex], data)
+		log.Println("Favori ajouté avec succès")
+		// Enregistrer les modifications dans le fichier Liked.json
+		err = manager.WriteLikedFile(users)
+		if err != nil {
+			http.Error(w, "Erreur d'écriture du fichier Liked.json", http.StatusInternalServerError)
+			return
+		}
+
+		// Répondre avec un message de succès
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "Favori ajouté avec succès")
+
+	case http.MethodDelete:
+		log.Println("supression de la music...")
+		// Lire les paramètres de la requête
+		idMusic := mux.Vars(r)["id-music"]
+		pseudo := mux.Vars(r)["pseudo"]
+		log.Println("pseudo u usic  music delete...", pseudo)
+		log.Println("id de la music...", idMusic)
+
+		// Lire les données actuelles du fichier Liked.json
+		users, err := manager.ReadLikedFile()
+		if err != nil {
+			http.Error(w, "Erreur de lecture du fichier Liked.json", http.StatusInternalServerError)
+			return
+		}
+
+		// Trouver l'utilisateur dans la liste des utilisateurs
+		userIndex := manager.FindUser(users, pseudo)
+		log.Println(pseudo)
+		if userIndex == -1 {
+			http.Error(w, "Utilisateur non trouvé", http.StatusBadRequest)
+			return
+		}
+		// Supprimer le favori de l'utilisateur
+		removeFavorite(&users[userIndex], idMusic)
+		log.Println("la position du user:", &users[userIndex]) // Enregistrer les modifications dans le fichier Liked.json
+		err = manager.WriteLikedFile(users)
+		if err != nil {
+			http.Error(w, "Erreur d'écriture du fichier Liked.json", http.StatusInternalServerError)
+			return
+		}
+
+		// Répondre avec un message de succès
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "Favori supprimé avec succès")
+
+	default:
+		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
+		return
+	}
+}
+
+// Fonction pour ajouter un favori à un utilisateur
+func addFavorite(user *manager.User, data manager.Favori) {
+	// Ajouter le favori à l'utilisateur
+	user.Favoris = append(user.Favoris, data)
+}
+
+// Fonction pour retirer un favori
+func removeFavorite(user *manager.User, idMusic string) {
+	// Créer une nouvelle liste de favoris pour l'utilisateur
+	var newFavorites []manager.Favori
+	// Trouver et retirer le favori de l'utilisateur
+	for _, f := range user.Favoris {
+		if f.IDMusic != idMusic {
+			// Si ce n'est pas le cas, ajouter ce favori à la nouvelle liste
+			newFavorites = append(newFavorites, f)
+		}
+	}
+	// Mettre à jour la liste de favoris de l'utilisateur
+	user.Favoris = newFavorites
+}

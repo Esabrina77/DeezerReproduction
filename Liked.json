@@ -1,0 +1,37 @@
+[
+    {
+        "pseudo": "kheir133",
+        "favoris": [
+            {
+                "idMusic": "175687",
+                "title": "ma femme",
+                "preview": "https://cdns-preview-5.dzcdn.net/stream/c-54b2b127278882702a4be9a6dc66167b-3.mp3"
+            },
+            {
+                "idMusic": "145641",
+                "title": "ma solitude",
+                "preview": "https://cdns-preview-5.dzcdn.net/stream/c-54b2b127277782702a4be9a6dc66167b-3.mp3"
+            }
+        ]
+    },
+    {
+        "pseudo": "sabrina",
+        "favoris": [
+            {
+                "idMusic": "145687",
+                "title": "ma vie et toi",
+                "preview": "ttps://cdns-preview-5.dzcdn.net/stream/c-54b2b127277782702a4be9a6dc66767b-3.mp3"
+            },
+            {
+                "idMusic": "145641",
+                "title": "ma solitude",
+                "preview": "ttps://cdns-preview-5.dzcdn.net/stream/c-54b2b127277782702a4be9a6ec66167b-3.mp3"
+            },
+            {
+                "idMusic": "898651522",
+                "title": "M.I.L.S 3",
+                "preview": "https://cdns-preview-b.dzcdn.net/stream/c-bef97c475ed90bb22480acb42541aee4-6.mp3"
+            }
+        ]
+    }
+]

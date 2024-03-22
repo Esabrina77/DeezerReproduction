@@ -106,20 +106,28 @@
     <script>
         //Bienvenue à l'utilisateur
         const pseudo = "{{.Pseudo}}";
-// Fonction pour lire le message vocal de bienvenue avec le pseudo
-const source = new URLSearchParams(window.location.search).get('source');
+    const source = new URLSearchParams(window.location.search).get('source');
+    let message = '';
 
-if (source === 'connexion' || source === 'inscription') {
-    function playWelcomeMessage(pseudo) {
-        const message = `Connexion réussie, Bienvenue ${pseudo}, je serai votre guide`;
-        const msg = new SpeechSynthesisUtterance(message);
-        window.speechSynthesis.speak(msg);
+    // Choisissez le message en fonction de la source
+    if (source === 'connexion') {
+        message = `Contente de te revoir ${pseudo}`;
+    } else if (source === 'inscription') {
+        message = `Inscription réussie, Bienvenue ${pseudo}, je serai votre guide`;
     }
-// Lire le message d'accueil lorsque la page est chargée
-window.addEventListener('load', () => {
-    playWelcomeMessage(pseudo);
-});
-}
+
+    // Lire le message d'accueil lorsque la page est chargée
+    if (message !== '') {
+        function playWelcomeMessage(message) {
+            const msg = new SpeechSynthesisUtterance(message);
+            window.speechSynthesis.speak(msg);
+        }
+
+        window.addEventListener('load', () => {
+            playWelcomeMessage(message);
+        });
+    }
+
 //'caroussel des artists'
         let currentArtistIndex = 0;
         const artists = document.querySelectorAll('.ChartArtist');
@@ -160,6 +168,15 @@ window.addEventListener('load', () => {
             const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
             progressBar.value = percentage;
         });
+  
+        // Lire le message vocal lorsque la souris survole .FamousSong
+        const famousSong = document.querySelector('.FamousSong');
+
+famousSong.addEventListener('click', () => {
+    const famousSongMessage = "Il s'agit de l'artiste le plus écouté du moment";
+    const msg = new SpeechSynthesisUtterance(famousSongMessage);
+    window.speechSynthesis.speak(msg);
+});
     </script>
 </body>
 

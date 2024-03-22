@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../assets/styles/album.css">
-  <title>Album-{{.Album.Title}}</title>
+  <title>Album-{{.Album.Title}}-{{.Pseudo}}</title>
 </head>
 
 <body>
@@ -57,10 +57,10 @@
         <p>{{.Title}}</p>
       </div>
       <div class="LIKE">
-        <img src="/assets/icons/coeur-brise.png" class="PushLike">
+        <img src="/assets/icons/coeur-brise.png" class="PushLike"  id="{{.ID}}" data-title="{{.Title}}" data-preview="{{.Preview}}">
       </div>
-      <div>
-        <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a>
+      <div class="idMusic"> 
+        <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a >
       </div>
     </div>
     {{end}}
@@ -73,35 +73,22 @@
       </audio>
   </div>
       </div>
-      <script>
-       
-        //Bienvenue à l'utilisateur
+     
+     
+     <script>
+   //Bienvenue à l'utilisateur
         const pseudo = "{{.Album.Title}}";
 // Fonction pour lire le message vocal de bienvenue avec le pseudo
 function playWelcomeMessage(pseudo) {
-    const message = `Ici,retrouvez toutes les tracks de l'album ${pseudo}`;
-    msg.lang = 'fr-FR'; // Définir la langue sur français
+    const message = `Ici,retrouvez toutes les tracks de l'album ${pseudo}.`;
     const msg = new SpeechSynthesisUtterance(message);
+    msg.lang = 'fr-FR'; // Définir la langue sur français
     window.speechSynthesis.speak(msg);
 }
 // Lire le message d'accueil lorsque la page est chargée
 window.addEventListener('load', () => {
     playWelcomeMessage(pseudo);
 });
-        //Fonctionnalité favoris
-        const likeButtons = document.querySelectorAll('.LIKE');
-
-likeButtons.forEach(likeButton => {
-    const likeImg = likeButton.querySelector('.PushLike');
-    likeButton.addEventListener('click', function() {
-        if (likeImg.src.includes('coeur-brise.png')) {
-            likeImg.src = '/assets/icons/coeur.png';
-        } else {
-            likeImg.src = '/assets/icons/coeur-brise.png';
-        }
-    });
-});
-
         //JOUER DE LA MUSIQUE
         //Recup  des elements des boutouns play
         const playMusics = document.querySelectorAll('.playMusic');
@@ -118,6 +105,67 @@ likeButtons.forEach(likeButton => {
             audioPlayer.play(); // Lecture de la piste audio chargée
         });
       });
+       //Fonctionnalité favoris
+    const likeButtons = document.querySelectorAll('.LIKE');
+     // Récupérer le nom d'utilisateur actuel depuis votre modèle HTML
+const nameUser = "{{.Pseudo}}";
+// Fonction pour envoyer les données au serveur Go
+async function sendDataToServer(method, idMusic, title, preview) {
+    // Convertir les données en format JSON
+    const data = {
+        idMusic: idMusic,
+        title: title,
+        preview: preview
+    };
+
+    try {
+        const response = await fetch('/add-remove', {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            console.log('Données envoyées avec succès au serveur Go.');
+        } else {
+            console.error('Erreur lors de l\'envoi des données au serveur Go.');
+        }
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi des données au serveur Go:', error);
+    }
+}
+
+// Fonction pour ajouter une musique aux favoris de l'utilisateur
+function addToFavorites(idMusic, title, preview) {
+    // Envoi des données au serveur
+    sendDataToServer('POST', idMusic, title, preview);
+}
+
+// Fonction pour retirer une musique des favoris de l'utilisateur
+function removeFromFavorites(pseudo,idMusic) {
+  sendDataToServer('POST', pseudo, idMusic);
+}
+
+//ENVOYER LES DATAS AU SERVE
+likeButtons.forEach(likeButton => {
+    const likeImg = likeButton.querySelector('.PushLike');
+    likeButton.addEventListener('click', function() {
+        if (likeImg.src.includes('coeur-brise.png')) {
+            likeImg.src = '/assets/icons/coeur.png';
+            // Récupérer l'ID de la musique aimée
+          console.log(` ${nameUser} l'ID de la musique aimée: ${likeImg.id}`)
+          console.log(likeImg.dataset.title)
+          console.log(likeImg.dataset.preview)
+          addToFavorites(likeImg.id, likeImg.dataset.title, likeImg.dataset.preview);
+        } else {
+            likeImg.src = '/assets/icons/coeur-brise.png';
+            console.log(` ${nameUser} l'ID de la musique retiré: ${likeImg.id}`)
+            removeFromFavorites(nameUser,likeImg.id);
+          }
+    });
+});
     </script>
 </body>
 

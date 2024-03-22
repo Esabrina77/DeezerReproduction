@@ -15,7 +15,6 @@ func InitServe() {
 
 	http.HandleFunc("/genre", controller.GenreHandler)
 	http.HandleFunc("/aboutUs", controller.AboutUsHandler)
-
 	http.HandleFunc("/artist/", controller.ArtistHandler)
 	http.HandleFunc("/search", controller.SearchHandler)
 	http.HandleFunc("/radio", controller.RadiosHandler)
@@ -26,6 +25,7 @@ func InitServe() {
 	http.HandleFunc("/treatmentI", controller.TreatInscriptionHandler)
 	http.HandleFunc("/treatmentC", controller.TreatConnexionHandler)
 	http.HandleFunc("/404", controller.NotFoundHandler)
+	http.HandleFunc("/add-remove", controller.AddRemoveHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		initTemplate.Temp.ExecuteTemplate(w, "404", nil)

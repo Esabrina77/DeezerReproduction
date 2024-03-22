@@ -38,6 +38,11 @@
                 <div>
                     <h1>INSCRIPTION</h1>
                 </div>
+                {{if .Error}}
+<div class="alert alert-danger" role="alert">
+    Un utilisateur avec cet e-mail, mot de passe ou pseudo existe déjà.
+</div>
+{{end}}
                 <form method="POST" action="/treatmentI">
                     <label for="pseudo">Enter your pseudo: </label>
                     <input type="text" id="pseudo" name="pseudo" required>
