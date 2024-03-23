@@ -1,14 +1,12 @@
 {{define "favoris"}}
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../assets/styles/album.css">
   <title>Mes favoris</title>
 </head>
-
 <body>
   <div class="all">
     <div class="first">
@@ -48,19 +46,19 @@
       </div>
       <div class="TopALL">
         <div class="allSongs">
-        {{range .Tracks}}
+        {{range .}}
         <div class="track">
       <div class="md5">
-     <img src="/assets/images/icons8-musical-note-30.png" alt="{{.Artist.Name}}">
+     <img src="/assets/images/icons8-musical-note-30.png" alt="note de musique">
       </div>
       <div class="Title">
-        <p>{{.Title}}</p>
+        <p>{{.title}}</p>
       </div>
       <div class="LIKE">
-        <img src="/assets/icons/coeur-brise.png" class="PushLike"  id="{{.ID}}" data-title="{{.Title}}" data-preview="{{.Preview}}">
+        <img src="/assets/icons/coeur-brise.png" class="PushLike">
       </div>
       <div class="idMusic"> 
-        <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a >
+        <a href="{{.preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a >
       </div>
     </div>
     {{end}}
@@ -73,6 +71,36 @@
       </audio>
   </div>
       </div>
+     
+    </div>
+    <script>
+   // Fonction pour lire le message vocal de bienvenue avec le pseudo
+   function playWelcomeMessage() {
+    const message = `Ici, retrouvez tous vos favoris.`;
+    const msg = new SpeechSynthesisUtterance(message);
+    msg.lang = 'fr-FR'; // Définir la langue sur français
+    window.speechSynthesis.speak(msg);
+}
+// Lire le messagelorsque la page est chargée
+window.addEventListener('load', () => {
+    playWelcomeMessage();
+});
+           //JOUER DE LA MUSIQUE
+           //Recup  des elements des boutouns play
+           const playMusics = document.querySelectorAll('.playMusic');
+           const audioPlayer = document.getElementById('audioPlayer');
+           const audioSource = document.getElementById('audioSource');
+         
+           // donner une action à chaque bouton
+           playMusics.forEach(playMusic => {
+           playMusic.addEventListener('click', (event) => {
+               event.preventDefault(); // Empêche la redirection par défaut du lien
+               const audioURL = playMusic.href;
+               audioSource.src = audioURL;
+               audioPlayer.load(); // Charge la piste audio
+               audioPlayer.play(); // Lecture de la piste audio chargée
+           });
+         });</script>
 </body>
 </html>
 {{end}}

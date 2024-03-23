@@ -25,7 +25,9 @@ func InitServe() {
 	http.HandleFunc("/treatmentI", controller.TreatInscriptionHandler)
 	http.HandleFunc("/treatmentC", controller.TreatConnexionHandler)
 	http.HandleFunc("/404", controller.NotFoundHandler)
-	http.HandleFunc("/add-remove", controller.AddRemoveHandler)
+	http.HandleFunc("/add-remove", controller.AddHandler)
+	http.HandleFunc("/remove/", controller.RemoveHandler)
+	http.HandleFunc("/favoris", controller.FavorisHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		initTemplate.Temp.ExecuteTemplate(w, "404", nil)

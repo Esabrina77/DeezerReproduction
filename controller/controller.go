@@ -17,7 +17,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	// htgotts "github.com/hegedustibor/htgo-tts"
 )
@@ -500,8 +499,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 //	}
 //
 // Gestionnaire pour ajouter ou retirer des favoris
-func AddRemoveHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("AddRemoveHandler")
+func AddHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("AddHandler")
 	Connected(w, r)
 	// Récupérer le pseudo de la session
 	session, err := store.Get(r, "session-name")
@@ -555,42 +554,6 @@ func AddRemoveHandler(w http.ResponseWriter, r *http.Request) {
 		// Répondre avec un message de succès
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, "Favori ajouté avec succès")
-
-	case http.MethodDelete:
-		log.Println("supression de la music...")
-		// Lire les paramètres de la requête
-		idMusic := mux.Vars(r)["id-music"]
-		pseudo := mux.Vars(r)["pseudo"]
-		log.Println("pseudo u usic  music delete...", pseudo)
-		log.Println("id de la music...", idMusic)
-
-		// Lire les données actuelles du fichier Liked.json
-		users, err := manager.ReadLikedFile()
-		if err != nil {
-			http.Error(w, "Erreur de lecture du fichier Liked.json", http.StatusInternalServerError)
-			return
-		}
-
-		// Trouver l'utilisateur dans la liste des utilisateurs
-		userIndex := manager.FindUser(users, pseudo)
-		log.Println(pseudo)
-		if userIndex == -1 {
-			http.Error(w, "Utilisateur non trouvé", http.StatusBadRequest)
-			return
-		}
-		// Supprimer le favori de l'utilisateur
-		removeFavorite(&users[userIndex], idMusic)
-		log.Println("la position du user:", &users[userIndex]) // Enregistrer les modifications dans le fichier Liked.json
-		err = manager.WriteLikedFile(users)
-		if err != nil {
-			http.Error(w, "Erreur d'écriture du fichier Liked.json", http.StatusInternalServerError)
-			return
-		}
-
-		// Répondre avec un message de succès
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "Favori supprimé avec succès")
-
 	default:
 		http.Error(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
@@ -603,17 +566,86 @@ func addFavorite(user *manager.User, data manager.Favori) {
 	user.Favoris = append(user.Favoris, data)
 }
 
-// Fonction pour retirer un favori
+func RemoveHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("RemoveHandler")
+	Connected(w, r)
+	// Récupérer le pseudo de la session
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Erreur de session", http.StatusInternalServerError)
+		return
+	}
+	pseudo := session.Values["pseudo"].(string)
+
+	// Obtenir l'ID de la musique de l'URL
+	idParts := strings.Split(r.URL.Path, "/")
+	idMusic := idParts[len(idParts)-1]
+
+	// Lire les données actuelles du fichier Liked.json
+	users, err := manager.ReadLikedFile()
+	if err != nil {
+		http.Error(w, "Erreur de lecture du fichier Liked.json", http.StatusInternalServerError)
+		return
+	}
+	userIndex := manager.FindUser(users, pseudo)
+	if userIndex == -1 {
+		http.Error(w, "Utilisateur non trouvé", http.StatusBadRequest)
+		return
+	}
+
+	// Supprimer le favori de l'utilisateur en utilisant l'ID de la musique
+	removeFavorite(&users[userIndex], idMusic)
+	// Enregistrer les modifications dans le fichier Liked.json
+	err = manager.WriteLikedFile(users)
+	if err != nil {
+		http.Error(w, "Erreur d'écriture du fichier Liked.json", http.StatusInternalServerError)
+		return
+	}
+
+	// Répondre avec un message de succès
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, "Favori supprimé avec succès")
+}
+
+// Fonction pour retirer un favori d'un utilisateur
 func removeFavorite(user *manager.User, idMusic string) {
 	// Créer une nouvelle liste de favoris pour l'utilisateur
 	var newFavorites []manager.Favori
-	// Trouver et retirer le favori de l'utilisateur
+	// Trouver et retirer le favori de l'utilisateur avec l'ID de la musique
 	for _, f := range user.Favoris {
 		if f.IDMusic != idMusic {
-			// Si ce n'est pas le cas, ajouter ce favori à la nouvelle liste
 			newFavorites = append(newFavorites, f)
 		}
 	}
-	// Mettre à jour la liste de favoris de l'utilisateur
 	user.Favoris = newFavorites
+}
+
+func FavorisHandler(w http.ResponseWriter, r *http.Request) {
+	Connected(w, r)
+	// Récupérer le pseudo de la session
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, "Erreur de session", http.StatusInternalServerError)
+		return
+	}
+	pseudo := session.Values["pseudo"].(string)
+
+	// Lire les données actuelles du fichier Liked.json
+	users, err := manager.ReadLikedFile()
+	if err != nil {
+		http.Error(w, "Erreur de lecture du fichier Liked.json", http.StatusInternalServerError)
+		return
+	}
+
+	// Trouver l'index de l'utilisateur dans la liste des utilisateurs
+	userIndex := manager.FindUser(users, pseudo)
+	if userIndex == -1 {
+		http.Error(w, "Utilisateur non trouvé", http.StatusBadRequest)
+		return
+	}
+
+	// Récupérer les favoris de l'utilisateur
+	favoris := users[userIndex].Favoris
+
+	inittemplate.Temp.ExecuteTemplate(w, "favoris", favoris)
 }

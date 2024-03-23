@@ -74,7 +74,7 @@
   </div>
       </div>
      
-     
+    </div>
      <script>
    //Bienvenue à l'utilisateur
         const pseudo = "{{.Album.Title}}";
@@ -144,8 +144,23 @@ function addToFavorites(idMusic, title, preview) {
 }
 
 // Fonction pour retirer une musique des favoris de l'utilisateur
-function removeFromFavorites(pseudo,idMusic) {
-  sendDataToServer('POST', pseudo, idMusic);
+function removeFromFavorites(idMusic) {
+    fetch(`/remove/${idMusic}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Favori supprimé avec succès');
+        } else {
+            console.error('Erreur lors de la suppression du favori');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la suppression du favori:', error);
+    });
 }
 
 //ENVOYER LES DATAS AU SERVE
@@ -162,7 +177,7 @@ likeButtons.forEach(likeButton => {
         } else {
             likeImg.src = '/assets/icons/coeur-brise.png';
             console.log(` ${nameUser} l'ID de la musique retiré: ${likeImg.id}`)
-            removeFromFavorites(nameUser,likeImg.id);
+       removeFromFavorites(likeImg.id);
           }
     });
 });
