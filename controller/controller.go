@@ -619,7 +619,6 @@ func removeFavorite(user *manager.User, idMusic string) {
 	}
 	user.Favoris = newFavorites
 }
-
 func FavorisHandler(w http.ResponseWriter, r *http.Request) {
 	Connected(w, r)
 	// Récupérer le pseudo de la session
@@ -644,8 +643,60 @@ func FavorisHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Récupérer les favoris de l'utilisateur
 	favoris := users[userIndex].Favoris
+	log.Print(favoris)
+	favorisData := make([]manager.MusicData, len(favoris))
 
-	inittemplate.Temp.ExecuteTemplate(w, "favoris", favoris)
+	for i, fav := range favoris {
+		favorisData[i] = manager.MusicData{
+			ID:      fav.IDMusic,
+			Title:   fav.Title,
+			Preview: fav.Preview,
+		}
+	}
+	log.Println(favorisData)
+	inittemplate.Temp.ExecuteTemplate(w, "favoris", favorisData)
+}
+
+//GESTION DES ERREURS CLIENT SERVEURS
+
+func Handle500(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+	RenderErrorTemplate(w, "500", "Erreur interne du serveur")
+}
+
+func Handle301(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusMovedPermanently)
+	RenderErrorTemplate(w, "301", "Redirection permanente")
+}
+
+func Handle403(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusForbidden)
+	RenderErrorTemplate(w, "403", "Accès interdit")
+}
+
+func Handle503(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusServiceUnavailable)
+	RenderErrorTemplate(w, "503", "Service non disponible")
+}
+
+func Handle400(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusBadRequest)
+	RenderErrorTemplate(w, "400", "Requête incorrecte")
+}
+
+func Handle505(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusHTTPVersionNotSupported)
+	RenderErrorTemplate(w, "505", "Version HTTP non supportée")
+}
+
+func RenderErrorTemplate(w http.ResponseWriter, errorCode string, errorMessage string) {
+	data := struct {
+		ErrorCode    string
+		ErrorMessage string
+	}{
+		ErrorCode:    errorCode,
+		ErrorMessage: errorMessage,
+	}
+	inittemplate.Temp.ExecuteTemplate(w, "error", data)
 }

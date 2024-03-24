@@ -1,7 +1,6 @@
 {{define "album"}}
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,139 +47,140 @@
       </div>
       <div class="TopALL">
         <div class="allSongs">
-        {{range .Tracks}}
-        <div class="track">
-      <div class="md5">
-     <img src="/assets/images/icons8-musical-note-30.png" alt="{{.Artist.Name}}">
+          {{range .Tracks}}
+          <div class="track">
+            <div class="md5">
+              <img src="/assets/images/icons8-musical-note-30.png" alt="{{.Artist.Name}}">
+            </div>
+            <div class="Title">
+              <p>{{.Title}}</p>
+            </div>
+            <div class="LIKE">
+              <img src="/assets/icons/coeur-brise.png" class="PushLike" id="{{.ID}}" data-title="{{.Title}}"
+                data-preview="{{.Preview}}">
+            </div>
+            <div class="idMusic">
+              <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a>
+            </div>
+          </div>
+          {{end}}
+        </div>
+        <!-- jouer de la musique -->
+        <div class="play-music">
+          <audio id="audioPlayer" controls>
+            <source id="audioSource" type="audio/mp3">
+            Format non pris en Charge.
+          </audio>
+        </div>
       </div>
-      <div class="Title">
-        <p>{{.Title}}</p>
-      </div>
-      <div class="LIKE">
-        <img src="/assets/icons/coeur-brise.png" class="PushLike"  id="{{.ID}}" data-title="{{.Title}}" data-preview="{{.Preview}}">
-      </div>
-      <div class="idMusic"> 
-        <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a >
-      </div>
+
     </div>
-    {{end}}
-  </div>
-    <!-- jouer de la musique -->
-    <div class="play-music">
-      <audio id="audioPlayer" controls>
-          <source id="audioSource" type="audio/mp3">
-          Format non pris en Charge.
-      </audio>
-  </div>
-      </div>
-     
-    </div>
-     <script>
-   //Bienvenue à l'utilisateur
-        const pseudo = "{{.Album.Title}}";
-// Fonction pour lire le message vocal de bienvenue avec le pseudo
-function playWelcomeMessage(pseudo) {
-    const message = `Ici,retrouvez toutes les tracks de l'album ${pseudo}.`;
-    const msg = new SpeechSynthesisUtterance(message);
-    msg.lang = 'fr-FR'; // Définir la langue sur français
-    window.speechSynthesis.speak(msg);
-}
-// Lire le message d'accueil lorsque la page est chargée
-window.addEventListener('load', () => {
-    playWelcomeMessage(pseudo);
-});
-        //JOUER DE LA MUSIQUE
-        //Recup  des elements des boutouns play
-        const playMusics = document.querySelectorAll('.playMusic');
-        const audioPlayer = document.getElementById('audioPlayer');
-        const audioSource = document.getElementById('audioSource');
-      
-        // donner une action à chaque bouton
-        playMusics.forEach(playMusic => {
+    <script>
+      //Bienvenue à l'utilisateur
+      const pseudo = "{{.Album.Title}}";
+      // Fonction pour lire le message vocal de bienvenue avec le pseudo
+      function playWelcomeMessage(pseudo) {
+        const message = `Ici,retrouvez toutes les tracks de l'album ${pseudo}.`;
+        const msg = new SpeechSynthesisUtterance(message);
+        msg.lang = 'fr-FR'; // Définir la langue sur français
+        window.speechSynthesis.speak(msg);
+      }
+      // Lire le message d'accueil lorsque la page est chargée
+      window.addEventListener('load', () => {
+        playWelcomeMessage(pseudo);
+      });
+      //JOUER DE LA MUSIQUE
+      //Recup  des elements des boutouns play
+      const playMusics = document.querySelectorAll('.playMusic');
+      const audioPlayer = document.getElementById('audioPlayer');
+      const audioSource = document.getElementById('audioSource');
+
+      // donner une action à chaque bouton
+      playMusics.forEach(playMusic => {
         playMusic.addEventListener('click', (event) => {
-            event.preventDefault(); // Empêche la redirection par défaut du lien
-            const audioURL = playMusic.href;
-            audioSource.src = audioURL;
-            audioPlayer.load(); // Charge la piste audio
-            audioPlayer.play(); // Lecture de la piste audio chargée
+          event.preventDefault(); // Empêche la redirection par défaut du lien
+          const audioURL = playMusic.href;
+          audioSource.src = audioURL;
+          audioPlayer.load(); // Charge la piste audio
+          audioPlayer.play(); // Lecture de la piste audio chargée
         });
       });
-       //Fonctionnalité favoris
-    const likeButtons = document.querySelectorAll('.LIKE');
-     // Récupérer le nom d'utilisateur actuel depuis votre modèle HTML
-const nameUser = "{{.Pseudo}}";
-// Fonction pour envoyer les données au serveur Go
-async function sendDataToServer(method, idMusic, title, preview) {
-    // Convertir les données en format JSON
-    const data = {
-        idMusic: idMusic,
-        title: title,
-        preview: preview
-    };
+      //Fonctionnalité favoris
+      const likeButtons = document.querySelectorAll('.LIKE');
+      // Récupérer le nom d'utilisateur actuel depuis votre modèle HTML
+      const nameUser = "{{.Pseudo}}";
+      // Fonction pour envoyer les données au serveur Go
+      async function sendDataToServer(method, idMusic, title, preview) {
+        // Convertir les données en format JSON
+        const data = {
+          idMusic: idMusic,
+          title: title,
+          preview: preview
+        };
 
-    try {
-        const response = await fetch('/add-remove', {
+        try {
+          const response = await fetch('/add-remove', {
             method: method,
             headers: {
-                'Content-Type': 'application/json'
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        });
+          });
 
-        if (response.ok) {
+          if (response.ok) {
             console.log('Données envoyées avec succès au serveur Go.');
-        } else {
+          } else {
             console.error('Erreur lors de l\'envoi des données au serveur Go.');
+          }
+        } catch (error) {
+          console.error('Erreur lors de l\'envoi des données au serveur Go:', error);
         }
-    } catch (error) {
-        console.error('Erreur lors de l\'envoi des données au serveur Go:', error);
-    }
-}
+      }
 
-// Fonction pour ajouter une musique aux favoris de l'utilisateur
-function addToFavorites(idMusic, title, preview) {
-    // Envoi des données au serveur
-    sendDataToServer('POST', idMusic, title, preview);
-}
+      // Fonction pour ajouter une musique aux favoris de l'utilisateur
+      function addToFavorites(idMusic, title, preview) {
+        // Envoi des données au serveur
+        sendDataToServer('POST', idMusic, title, preview);
+      }
 
-// Fonction pour retirer une musique des favoris de l'utilisateur
-function removeFromFavorites(idMusic) {
-    fetch(`/remove/${idMusic}`, {
-        method: 'DELETE',
-        headers: {
+      // Fonction pour retirer une musique des favoris de l'utilisateur
+      function removeFromFavorites(idMusic) {
+        fetch(`/remove/${idMusic}`, {
+          method: 'DELETE',
+          headers: {
             'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('Favori supprimé avec succès');
-        } else {
-            console.error('Erreur lors de la suppression du favori');
-        }
-    })
-    .catch(error => {
-        console.error('Erreur lors de la suppression du favori:', error);
-    });
-}
+          }
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('Favori supprimé avec succès');
+            } else {
+              console.error('Erreur lors de la suppression du favori');
+            }
+          })
+          .catch(error => {
+            console.error('Erreur lors de la suppression du favori:', error);
+          });
+      }
 
-//ENVOYER LES DATAS AU SERVE
-likeButtons.forEach(likeButton => {
-    const likeImg = likeButton.querySelector('.PushLike');
-    likeButton.addEventListener('click', function() {
-        if (likeImg.src.includes('coeur-brise.png')) {
+      //ENVOYER LES DATAS AU SERVE
+      likeButtons.forEach(likeButton => {
+        const likeImg = likeButton.querySelector('.PushLike');
+        likeButton.addEventListener('click', function () {
+          if (likeImg.src.includes('coeur-brise.png')) {
             likeImg.src = '/assets/icons/coeur.png';
             // Récupérer l'ID de la musique aimée
-          console.log(` ${nameUser} l'ID de la musique aimée: ${likeImg.id}`)
-          console.log(likeImg.dataset.title)
-          console.log(likeImg.dataset.preview)
-          addToFavorites(likeImg.id, likeImg.dataset.title, likeImg.dataset.preview);
-        } else {
+            console.log(` ${nameUser} l'ID de la musique aimée: ${likeImg.id}`)
+            console.log(likeImg.dataset.title)
+            console.log(likeImg.dataset.preview)
+            addToFavorites(likeImg.id, likeImg.dataset.title, likeImg.dataset.preview);
+          } else {
             likeImg.src = '/assets/icons/coeur-brise.png';
             console.log(` ${nameUser} l'ID de la musique retiré: ${likeImg.id}`)
-       removeFromFavorites(likeImg.id);
+            removeFromFavorites(likeImg.id);
           }
-    });
-});
+        });
+      });
     </script>
 </body>
 

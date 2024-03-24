@@ -32,6 +32,13 @@ func InitServe() {
 		w.WriteHeader(http.StatusNotFound)
 		initTemplate.Temp.ExecuteTemplate(w, "404", nil)
 	})
+	http.HandleFunc("/error500", controller.Handle500)
+	http.HandleFunc("/error301", controller.Handle301)
+	http.HandleFunc("/error403", controller.Handle403)
+	http.HandleFunc("/error503", controller.Handle503)
+	http.HandleFunc("/error400", controller.Handle400)
+	http.HandleFunc("/error505", controller.Handle505)
+
 	if err := http.ListenAndServe(controller.Port, nil); err != nil {
 		log.Fatal(err)
 	}

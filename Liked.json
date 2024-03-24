@@ -4,7 +4,7 @@
         "favoris": [
             {
                 "idMusic": "2346116675",
-                "title": "Bad",
+                "title": "Mauvais Djo",
                 "preview": "https://cdns-preview-8.dzcdn.net/stream/c-81c75535457d44e902bb2d17ff1d261f-3.mp3"
             },
             {
@@ -23,9 +23,9 @@
         "pseudo": "sabrina",
         "favoris": [
             {
-                "idMusic": "2346116675",
-                "title": "Bad",
-                "preview": "https://cdns-preview-8.dzcdn.net/stream/c-81c75535457d44e902bb2d17ff1d261f-3.mp3"
+                "idMusic": "85273848",
+                "title": "Twenty Five Miles (1987 Remix)",
+                "preview": "https://cdns-preview-5.dzcdn.net/stream/c-520c5c15b50f2e4d1f4d856256374445-3.mp3"
             },
             {
                 "idMusic": "125890423",
@@ -33,9 +33,34 @@
                 "preview": "https://cdns-preview-f.dzcdn.net/stream/c-ff388e75e444c269e5fe68c273a1ce86-5.mp3"
             },
             {
-                "idMusic": "2252173537",
-                "title": "C'est carré le S",
-                "preview": "https://cdns-preview-c.dzcdn.net/stream/c-c78724d5cb94e6291a6037ace2fa2e51-3.mp3"
+                "idMusic": "2346116675",
+                "title": "Bad",
+                "preview": "https://cdns-preview-8.dzcdn.net/stream/c-81c75535457d44e902bb2d17ff1d261f-3.mp3"
+            },
+            {
+                "idMusic": "2019838217",
+                "title": "Magnum",
+                "preview": "https://cdns-preview-8.dzcdn.net/stream/c-88103c97aefa32251838ed0dbd275e5c-3.mp3"
+            },
+            {
+                "idMusic": "2486578231",
+                "title": "Bahwai",
+                "preview": "https://cdns-preview-e.dzcdn.net/stream/c-e2564445e3b3c1e2d2c5272b4062effa-1.mp3"
+            },
+            {
+                "idMusic": "516941902",
+                "title": "60 années",
+                "preview": "https://cdns-preview-7.dzcdn.net/stream/c-72726f3fdae5ed014fcad3f82ff3190d-8.mp3"
+            },
+            {
+                "idMusic": "2668889732",
+                "title": "ENCORE LES PROBLÈMES",
+                "preview": "https://cdns-preview-a.dzcdn.net/stream/c-a0bc9520d9f5de986541cdc9ca7679c7-1.mp3"
+            },
+            {
+                "idMusic": "4603396",
+                "title": "Wanna Be Startin' Somethin'",
+                "preview": "https://cdns-preview-a.dzcdn.net/stream/c-a3a8db5f0348b9877c637a2e1b258f43-4.mp3"
             }
         ]
     }

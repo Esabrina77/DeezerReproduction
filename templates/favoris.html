@@ -1,12 +1,14 @@
 {{define "favoris"}}
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../assets/styles/album.css">
   <title>Mes favoris</title>
 </head>
+
 <body>
   <div class="all">
     <div class="first">
@@ -22,7 +24,6 @@
       </div>
     </div>
     <!-- .manga$*4 -->
-
     <div class="second">
       <div class="search">
         <div class="recherche">
@@ -38,6 +39,9 @@
                 src="/assets/icons/chercher.png"></button>
           </form>
         </div>
+        <a href="/favoris">
+            <img  class="refresh" src="/assets/icons/icons8-rafraîchir-30.png" alt="rafraîchir">
+        </a>
         <div class="lightMode">
           <input class="dark-light" type="checkbox" id="dark-light" name="dark-light" />
           <label for="dark-light"></label>
@@ -46,61 +50,139 @@
       </div>
       <div class="TopALL">
         <div class="allSongs">
-        {{range .}}
-        <div class="track">
-      <div class="md5">
-     <img src="/assets/images/icons8-musical-note-30.png" alt="note de musique">
+          {{range .}}
+          <div class="track">
+            <div class="md5">
+              <img src="/assets/images/icons8-musical-note-30.png" alt="note de musique">
+            </div>
+            <div class="Title">
+              <p>{{.Title}}</p>
+            </div>
+            <div class="LIKE">
+              <img src="/assets/icons/coeur.png" class="PushLike" id="{{.ID}}" data-title="{{.Title}}" data-preview="{{.Preview}}">
+            </div>
+            <div class="idMusic">
+              <a href="{{.Preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a>
+            </div>
+          </div>
+          {{end}}
+        </div>
+        <!-- jouer de la musique -->
+        <div class="play-music">
+          <audio id="audioPlayer" controls>
+            <source id="audioSource" type="audio/mp3">
+            Format non pris en Charge.
+          </audio>
+        </div>
       </div>
-      <div class="Title">
-        <p>{{.title}}</p>
-      </div>
-      <div class="LIKE">
-        <img src="/assets/icons/coeur-brise.png" class="PushLike">
-      </div>
-      <div class="idMusic"> 
-        <a href="{{.preview}}" class="playMusic"><button class="trackButton">Ecouter</button></a >
-      </div>
+
     </div>
-    {{end}}
-  </div>
-    <!-- jouer de la musique -->
-    <div class="play-music">
-      <audio id="audioPlayer" controls>
-          <source id="audioSource" type="audio/mp3">
-          Format non pris en Charge.
-      </audio>
-  </div>
-      </div>
-     
-    </div>
+
     <script>
-   // Fonction pour lire le message vocal de bienvenue avec le pseudo
-   function playWelcomeMessage() {
-    const message = `Ici, retrouvez tous vos favoris.`;
-    const msg = new SpeechSynthesisUtterance(message);
-    msg.lang = 'fr-FR'; // Définir la langue sur français
-    window.speechSynthesis.speak(msg);
-}
-// Lire le messagelorsque la page est chargée
-window.addEventListener('load', () => {
-    playWelcomeMessage();
-});
-           //JOUER DE LA MUSIQUE
-           //Recup  des elements des boutouns play
-           const playMusics = document.querySelectorAll('.playMusic');
-           const audioPlayer = document.getElementById('audioPlayer');
-           const audioSource = document.getElementById('audioSource');
-         
-           // donner une action à chaque bouton
-           playMusics.forEach(playMusic => {
-           playMusic.addEventListener('click', (event) => {
-               event.preventDefault(); // Empêche la redirection par défaut du lien
-               const audioURL = playMusic.href;
-               audioSource.src = audioURL;
-               audioPlayer.load(); // Charge la piste audio
-               audioPlayer.play(); // Lecture de la piste audio chargée
-           });
-         });</script>
+      // Fonction pour lire le message vocal de bienvenue avec le pseudo
+      function playWelcomeMessage() {
+        const message = `Ici, retrouvez tous vos favoris.`;
+        const msg = new SpeechSynthesisUtterance(message);
+        msg.lang = 'fr-FR'; // Définir la langue sur français
+        window.speechSynthesis.speak(msg);
+      }
+      // Lire le messagelorsque la page est chargée
+      window.addEventListener('load', () => {
+        playWelcomeMessage();
+      });
+      //JOUER DE LA MUSIQUE
+      //Recup  des elements des boutouns play
+      const playMusics = document.querySelectorAll('.playMusic');
+      const audioPlayer = document.getElementById('audioPlayer');
+      const audioSource = document.getElementById('audioSource');
+
+      // donner une action à chaque bouton
+      playMusics.forEach(playMusic => {
+        playMusic.addEventListener('click', (event) => {
+          event.preventDefault(); // Empêche la redirection par défaut du lien
+          const audioURL = playMusic.href;
+          audioSource.src = audioURL;
+          audioPlayer.load(); // Charge la piste audio
+          audioPlayer.play(); // Lecture de la piste audio chargée
+        });
+      });
+
+      //Fonctionnalité favoris
+       //Fonctionnalité favoris
+       const likeButtons = document.querySelectorAll('.LIKE');
+      async function sendDataToServer(method, idMusic, title, preview) {
+        // Convertir les données en format JSON
+        const data = {
+          idMusic: idMusic,
+          title: title,
+          preview: preview
+        };
+
+        try {
+          const response = await fetch('/add-remove', {
+            method: method,
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+
+          if (response.ok) {
+            console.log('Données envoyées avec succès au serveur Go.');
+          } else {
+            console.error('Erreur lors de l\'envoi des données au serveur Go.');
+          }
+        } catch (error) {
+          console.error('Erreur lors de l\'envoi des données au serveur Go:', error);
+        }
+      }
+
+      // Fonction pour ajouter une musique aux favoris de l'utilisateur
+      function addToFavorites(idMusic, title, preview) {
+        // Envoi des données au serveur
+        sendDataToServer('POST', idMusic, title, preview);
+      }
+
+      // Fonction pour retirer une musique des favoris de l'utilisateur
+      function removeFromFavorites(idMusic) {
+        fetch(`/remove/${idMusic}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('Favori supprimé avec succès');
+            } else {
+              console.error('Erreur lors de la suppression du favori');
+            }
+          })
+          .catch(error => {
+            console.error('Erreur lors de la suppression du favori:', error);
+          });
+      }
+
+      //ENVOYER LES DATAS AU SERVE
+      likeButtons.forEach(likeButton => {
+        const likeImg = likeButton.querySelector('.PushLike');
+        likeButton.addEventListener('click', function () {
+          if (likeImg.src.includes('coeur-brise.png')) {
+            likeImg.src = '/assets/icons/coeur.png';
+            // Récupérer l'ID de la musique aimée
+            console.log(`l'ID de la musique aimée: ${likeImg.id}`)
+            console.log(likeImg.dataset.title)
+            console.log(likeImg.dataset.preview)
+            addToFavorites(likeImg.id, likeImg.dataset.title, likeImg.dataset.preview);
+          } else {
+            likeImg.src = '/assets/icons/coeur-brise.png';
+            console.log(`l'ID de la musique retiré: ${likeImg.id}`)
+            removeFromFavorites(likeImg.id);
+          }
+        });
+      });
+    </script>
 </body>
+
 </html>
 {{end}}

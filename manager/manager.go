@@ -323,6 +323,11 @@ type Favori struct {
 	Title   string `json:"title"`
 	Preview string `json:"preview"`
 }
+type MusicData struct {
+	ID      string
+	Title   string
+	Preview string
+}
 
 // Chemin du fichier Liked.json
 const LikedFilePath = "Liked.json"
