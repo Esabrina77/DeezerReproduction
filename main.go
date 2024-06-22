@@ -8,7 +8,10 @@ import (
 )
 
 func main() {
-
+port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
 	manager.PrintColorResult("purple", "server is running...")
 	fmt.Println("")
 	manager.PrintColorResult("yellow", "CLICK HERE to OPEN  PAGE--->")
