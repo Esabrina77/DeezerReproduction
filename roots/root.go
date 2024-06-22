@@ -39,7 +39,12 @@ func InitServe() {
 	http.HandleFunc("/error400", controller.Handle400)
 	http.HandleFunc("/error505", controller.Handle505)
 
-	if err := http.ListenAndServe(controller.Port, nil); err != nil {
-		log.Fatal(err)
-	}
+	  port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080" // Fallback au port 8080 si la variable d'environnement PORT n'est pas définie
+    }
+
+    if err := http.ListenAndServe("0.0.0.0:"+port, nil); err != nil {
+        log.Fatal(err)
+    }
 }
