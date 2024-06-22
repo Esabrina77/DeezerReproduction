@@ -210,39 +210,55 @@ func GenreHandler(w http.ResponseWriter, r *http.Request) {
 // page d'acceuil
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	Connected(w, r)
+
 	// Récupérer le pseudo de la session
 	session, err := store.Get(r, "session-name")
 	if err != nil {
 		http.Error(w, "Erreur de session", http.StatusInternalServerError)
 		return
 	}
+
 	pseudo := session.Values["pseudo"].(string)
 
 	response, err := http.Get("https://api.deezer.com/chart")
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Erreur lors de la requête vers l'API Deezer", http.StatusInternalServerError)
+		return
 	}
 	defer response.Body.Close()
 
 	var charts manager.Charts
 	err = json.NewDecoder(response.Body).Decode(&charts)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Erreur lors de l'analyse de la réponse JSON", http.StatusInternalServerError)
+		return
 	}
+
+	if len(charts.Tracks.Data) == 0 || len(charts.Artist.Data) < 10 {
+		http.Error(w, "Données de chartes insuffisantes", http.StatusInternalServerError)
+		return
+	}
+
 	//Récuperer la musique la plus ecouter
 	topTrack := charts.Tracks.Data[0]
+
 	//Récuperer les 10 artistes les plus écouter en france
 	topArtists := charts.Artist.Data[:10]
+
 	descript, err := os.ReadFile("Description.txt")
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Erreur lors de la lecture de la description", http.StatusInternalServerError)
+		return
 	}
+
 	description := manager.Description{
 		Phrases: strings.Split(string(descript), "\n"),
 	}
-	//génération d'un nombre aléatiore
+
+	//génération d'un nombre aléatoire
 	rand.Seed(time.Now().UnixNano())
 	randomIndex := rand.Intn(len(description.Phrases))
+
 	//bienvenue au client
 	data := struct {
 		TopTrack    manager.Tracks
@@ -255,9 +271,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		Description: description.Phrases[randomIndex],
 		Pseudo:      pseudo,
 	}
-	inittemplate.Temp.ExecuteTemplate(w, "home", data)
 
+	err = inittemplate.Temp.ExecuteTemplate(w, "home", data)
+	if err != nil {
+		http.Error(w, "Erreur lors de l'exécution du template", http.StatusInternalServerError)
+		return
+	}
 }
+
 
 // PAGE CORREPONDANT A CHAQUE ARTISTE EN FONCTION DE L4ID
 func extractArtistID(urlPath string) int {
